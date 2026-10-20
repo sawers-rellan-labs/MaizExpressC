@@ -46,6 +46,8 @@ OV = {
     '35310673': dict(study_id='Meng2022a'),
     '35628306': dict(study_id='Meng2022b', fit='borderline',
                      fit_note='All 24 sequenced libraries are at 13 °C; the 25 °C comparator is not sequenced, so only time contrasts within cold.'),
+    '39190817': dict(tissue_group=['Root'], related_to='Precursor to Sommer2025 from the same lab (Sommer is a co-author); also relates to Hey et al. 2017 J Exp Bot, root hairs vs de-haired root.',
+                     acc_note='Resolved 20 Oct 2026 from the OUP full-text Accession numbers section; agrees with metadata/accessions_resolved.tsv.'),
     # datasets shared between papers (count the libraries once)
     '38794432': dict(related_to='Same BioProject (PRJNA1050059) as Dou2025.'),
     '41095130': dict(related_to='Same BioProject (PRJNA1050059) as Zhang2024; probably the same libraries.'),
@@ -89,7 +91,7 @@ def system_group(s):
     s = s.lower()
     if "field" in s: return "Field"
     if re.search(r"greenhouse|glasshouse", s): return "Greenhouse"
-    if re.search(r"chamber|incubator|climate|phytotron|controlled", s): return "Growth chamber"
+    if re.search(r"chamber|cabinet|incubator|climate|phytotron|controlled", s): return "Growth chamber"
     return "NR"
 
 
