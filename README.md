@@ -10,7 +10,7 @@ decisions are in `CLAUDE.md`.
 
 ## Status
 
-M0 (scaffold) done. M1: `catalogue/maize_cold_rnaseq_studies.tsv` lists 50 maize cold RNA-seq studies (reviewed 20 Oct 2026; see `catalogue/README_maize_cold_catalogue.md`). Next: accession resolution.
+M0 (scaffold) done. M1: `catalogue/maize_cold_rnaseq_studies.tsv` lists 50 maize cold RNA-seq studies (reviewed 20 Oct 2026; see `catalogue/README_maize_cold_catalogue.md`). Accessions resolved in `metadata/accessions_resolved.tsv` (pending review).
 
 ## Layout
 

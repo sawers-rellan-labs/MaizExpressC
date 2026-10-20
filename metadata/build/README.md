@@ -1,21 +1,21 @@
 # metadata/build — accession resolution (M1)
 
-Provenance for `metadata/accessions_resolved.tsv`. Python 3 standard library only; responses are cached in `cache/` (git-ignored), so reruns are offline and fast. No sequence data is downloaded.
+Provenance for `metadata/accessions_resolved.tsv`. Python 3 standard library only; responses are cached in `cache/` (git-ignored), so reruns are offline and fast. No sequence data is downloaded. Run each script from the project root, in this order.
 
 | Script | Output | What it does |
 |---|---|---|
-| `harvest_accessions.py` | `accession_evidence.tsv` | Per study: NCBI elink PMID → BioProject / SRA / GEO, Europe PMC accession annotations and database links, accession-pattern scan of PMC and Europe PMC full-text XML. |
-| `search_repositories.py` | `repo_bioproject_maize_N.tsv`, `repo_geo_maize_N.tsv`, `repo_sra_maize_N.tsv` | All maize BioProjects, GEO series and SRA experiment groups that mention N terms, for matching studies whose papers give no accession. |
-| `verify_accessions.py` | `accession_records.tsv`, `ena_runs/<acc>.tsv` | Reads `accession_candidates.tsv` and fetches each record: BioProject / GEO summary, plus the ENA run report (organism, strategy, layout, instrument, read counts, FASTQ URLs and MD5s). |
-| — | `uncatalogued_repository_records.tsv` | Maize N RNA-seq records that match no catalogue study. For Rubén to triage; nothing was added to the catalogue. |
+| `search_repositories.py` | `repo_bioproject_maize_cold.tsv`, `repo_geo_maize_cold.tsv`, `repo_sra_maize_cold.tsv` | All maize BioProjects, GEO series and SRA studies that mention cold, for matching. |
+| `harvest_accessions.py` | `accession_evidence.tsv` | For each catalogue study: NCBI elink from PMID to BioProject, SRA and GEO; Europe PMC annotations and database links; accession patterns in the PMC and Europe PMC full-text XML. |
+| `build_candidates.py` | `accession_candidates.tsv` | Merges the catalogue's accessions, the harvester's, and those found by hand (`EXTRA`, with their source). |
+| `verify_accessions.py` | `accession_records.tsv`, `ena_runs/<acc>.tsv` | Fetches each record: BioProject / GEO summary, plus the ENA run report (organism, strategy, layout, instrument, read counts, FASTQ URLs and MD5s). |
+| `resolve_accessions.py` | `../accessions_resolved.tsv` | One row per study and accession, with status, role, evidence and maize RNA-seq run count; the decisions are in its `D` table. |
+| `unmatched_records.py` | `uncatalogued_repository_records.tsv` | Maize cold records that match no catalogue study (`likely_cold_rnaseq` marks the plausible ones). For Rubén to triage; nothing is added to the catalogue. |
 
-Run from the project root: `python3 metadata/build/harvest_accessions.py`, and the same for the other two scripts.
-
-Steps done by hand (in the notes column of `accessions_resolved.tsv`):
-- Paper data statements read from PMC web pages, which keep back matter that the PMC XML drops (Yu2015, Yu2016, Huang2025, Guo2022 and others).
-- CNCB GSA records (CRA009546, CRA012157, CRA029028) checked in a browser, because the GSA site blocks scripted requests with a browser check.
-- Duplicate uploads found by comparing run read counts (Ravazzolo2021b vs Ravazzolo2020, GSE99638 vs GSE111425, the doubled runs in PRJNA661965).
-- BioSample attributes checked for the ambiguous JAAS projects (PRJNA556506, PRJNA607122) and for PRJNA836413.
+Steps done by hand (recorded in the `evidence` and `notes` columns):
+- Data statements read on PMC web pages. These keep back matter that the PMC XML drops; this is how Zhao2021's SRA runs and the not-deposited statements were found.
+- Publisher pages for studies without PMC text, read in a browser: OUP (Zhou2024), Wiley (Waters2017, Meng2025) and Springer (Han2026). ScienceDirect (Friero2023) did not load.
+- CNCB GSA records (CRA007319, CRA027029, CRA041093, CRA041107) checked in a browser, because the GSA site blocks scripted requests.
+- Line-name searches in NCBI (e.g. B144/Q319, He344, 18-599) and submitter/design matches against the repository tables. One match (Han2026 → PRJNA1314463) was refuted by the paper's own statement.
 
 ## M2: run tables and sample sheets
 
