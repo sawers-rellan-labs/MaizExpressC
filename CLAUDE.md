@@ -28,7 +28,7 @@ Sibling of **MaizExpressN** (nitrogen): `/Users/rra/Documents/MaizExpressN`, htt
 - Dropping a study (the N project's standing "drop unreliable studies" permission has not been confirmed for this project).
 - Deleting anything you didn't create.
 - Creating the GitHub repository (and its visibility) or deploying the app.
-- Moving past each review checkpoint: the catalogue (`catalogue/maize_cold_rnaseq_studies.tsv`), `metadata/accessions_resolved.tsv`, `metadata/needs_review.tsv`, `metadata/contrasts.tsv`, and the first working slice of the app.
+- Moving past each review checkpoint: the catalogue (`catalogue/maize_cold_rnaseq_studies.tsv`, passed 20 Oct 2026), `metadata/accessions_resolved.tsv`, `metadata/needs_review.tsv`, `metadata/contrasts.tsv`, and the first working slice of the app.
 
 ## What was copied from MaizExpressN and what still needs adapting
 - Ready to use: `pipeline/` (downloader, nf-core/rnaseq head job, manifests, library QC; paths renamed to MaizeExpressC), `metadata/build/` accession tools (`harvest_accessions.py`, `search_repositories.py`, `verify_accessions.py`), `build_runs.py` (N study rules removed), `library_exclusions.py`, `analysis/de_per_study.R`, `annotation/`, `tests/testthat/test-search.R`.
@@ -37,7 +37,8 @@ Sibling of **MaizExpressN** (nitrogen): `/Users/rra/Documents/MaizExpressN`, htt
 
 ## Decisions so far (20 Oct 2026)
 - Created from MaizExpressN (Rubén, 20 Oct 2026: "copy the infrastructure ... and create a parallel folder/repository; then do a search of papers that have studied cold stress in maize"). Name as Rubén wrote it: MaizeExpressC. Local git repository; no GitHub repository yet.
-- M1 catalogue, first pass (20 Oct 2026; checkpoint pending Rubén's review): `catalogue/maize_cold_rnaseq_studies.tsv`, 63 studies (`fit`: 50 core, 3 borderline, 10 tentative), plus `maize_cold_related.tsv` and `maize_cold_to_check.tsv`. How it was built: `catalogue/build/search_log.md`. That means PubMed (10 queries, 718 PMIDs, logged keyword pre-screen, 11 screening batches), a dataset-to-paper step (maize cold BioProjects and GEO series linked to PubMed; this found Makarevitch2015, whose abstract never says cold), a web/preprint search, and the accession harvester (full-text XML scan and NCBI links). Rebuild with `python3 catalogue/build/build_catalogue.py`; manual curation is in its `OV` table.
+- M1 catalogue, first pass (20 Oct 2026): 63 studies screened in (`fit`: 50 core, 3 borderline, 10 tentative), plus `maize_cold_related.tsv` and `maize_cold_to_check.tsv`. How it was built: `catalogue/build/search_log.md`. That means PubMed (10 queries, 718 PMIDs, logged keyword pre-screen, 11 screening batches), a dataset-to-paper step (maize cold BioProjects and GEO series linked to PubMed; this found Makarevitch2015, whose abstract never says cold), a web/preprint search, and the accession harvester (full-text XML scan and NCBI links). Rebuild with `python3 catalogue/build/build_catalogue.py`; manual curation is in its `OV` table.
+- Catalogue checkpoint passed (Rubén, 20 Oct 2026: "only keep the 50 core studies, drop the 3 borderline and the 10 tentative"). `build_catalogue.py` keeps `fit == core`; the 13 others are in `catalogue/maize_cold_not_core.tsv`. Next: accession resolution (checkpoint `metadata/accessions_resolved.tsv`).
 - NCBI E-utilities, Europe PMC and the ENA Portal API work from the Mac (unlike the cloud workspace used for the N catalogue). Publisher pages (Elsevier, Springer, Wiley, MDPI) often block scripted fetches.
 
 ## Inherited facts and lessons from MaizExpressN (Hazel, pipeline, analysis, app)

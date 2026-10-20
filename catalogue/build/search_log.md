@@ -41,6 +41,10 @@ Each batch was screened by a subagent with the rules in `agent_instructions.md`.
 
 `build_catalogue.py` merges the agent tables and applies manual curation (the `OV` table): study-ID clashes, shared datasets, and borderline or tentative fits. It writes the catalogue, related and to-check tables.
 
+## 6. Review (Rubén, 20 Oct 2026)
+
+Kept the 50 core studies. The 3 borderline and 10 tentative studies were left out; they are listed in `catalogue/maize_cold_not_core.tsv`.
+
 ## Known limits
 
 - The PubMed full-text tool used by the agents drops data-availability sections; the harvester recovers many of them, but 15 core studies still have no accession.

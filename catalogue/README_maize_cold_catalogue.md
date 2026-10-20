@@ -1,9 +1,12 @@
 # Maize cold RNA-seq catalogue — README
 
-Built 20 Oct 2026 (M1, first pass; checkpoint for Rubén). Purpose: list published RNA-seq experiments in maize (Zea) that compare a low-temperature treatment with a control temperature, with the setup and data accessions needed to download and re-quantify the reads.
+Built 20 Oct 2026 (M1). Reviewed by Rubén on 20 Oct 2026: only the 50 core studies are kept. Purpose: list published RNA-seq experiments in maize (Zea) that compare a low-temperature treatment with a control temperature, with the setup and data accessions needed to download and re-quantify the reads.
 
 ## Files
-- `maize_cold_rnaseq_studies.tsv`: 63 studies, one row per paper or preprint. Column `fit` is `core` (50), `borderline` (3) or `tentative` (10). Tentative means the design could not be confirmed from full text (abstract only, or a preprint or journal outside PubMed).
+- `maize_cold_rnaseq_studies.tsv`: 50 core studies, one row per paper.
+- `maize_cold_not_core.tsv`: 13 studies left out at review (Rubén, 20 Oct 2026), each with the reason.
+  - 3 borderline: post-harvest storage of detached kernels; a cold soaking test before germination at 25 °C; a design with no control-temperature libraries.
+  - 10 tentative: the design could not be confirmed from full text (abstract only, or a preprint or journal outside PubMed).
 - `maize_cold_related.tsv`: 63 related items. These are microarray and small-RNA studies, papers that only reanalyse public cold data (useful pointers to datasets), and cold transcriptome papers whose design was ambiguous.
 - `maize_cold_to_check.tsv`: 10 open leads. These are dataset accessions reused by other papers whose primary study still has to be identified, plus surveys and meta-analyses to cross-check coverage against.
 - `build/`: how the catalogue was made; see `build/search_log.md`.
@@ -22,18 +25,18 @@ New transcriptome sequencing of Zea tissue under low temperature and a control t
   - `lead`: unverified.
   - `to resolve`: none found yet.
 - `related_to`: papers that share a dataset (count libraries once).
-- `fit` and `fit_note`: why a study is borderline or tentative.
+- `fit` (all `core` in the main table) and `fit_note`.
 
-## Counts (core studies)
+## Counts (50 core studies)
 - 24 with an accession stated in the paper, 10 found by the harvester, 1 lead, and 15 still to resolve. Most of the unresolved are recent papers whose data statements the full-text services drop, or papers without PMC full text.
-- Repositories: mostly NCBI (BioProject/SRA/GEO). CNCB GSA holds Tang2026, He2023a and Xiao2022; ENA holds Bozic2025.
-- Designs: chilling 48, tolerant vs sensitive or other genotype contrasts 35, time courses 17, germination 16, multi-stress panels 9, recovery 6, mutants 6, priming or chemical × cold 6, freezing 1.
-- Tissues: leaf 27, seed/germination 14, root 13, shoot (including mesocotyl and coleoptile) 10, whole seedling 7.
-- Years: 2015–2026, 45 of them since 2020.
+- Repositories: mostly NCBI (BioProject/SRA/GEO). CNCB GSA holds Tang2026 and He2023a; ENA holds Bozic2025.
+- Designs: chilling 42, tolerant vs sensitive or other genotype contrasts 26, time courses 14, germination 12, multi-stress panels 9, recovery 6, mutants 6, priming or chemical × cold 5, freezing 1.
+- Tissues: leaf 25, root 12, seed/germination 10, shoot (including mesocotyl and coleoptile) 9, whole seedling 6.
+- Years: 2015–2026, 41 of them since 2020.
+- 5 core studies were screened from the abstract alone (the design was clear there); their full text is read at accession resolution.
 
 ## Known gaps
 - Keyword searches miss papers whose abstracts never say "cold" or "RNA-seq". Makarevitch2015, the B73/Mo17/Oh43 cold, heat, salt and UV panel, is one of them; it was found through its dataset. The dataset-to-paper step (`build/dataset_papers.py`) covers maize cold BioProjects and GEO series that NCBI links to a paper, but not datasets without a PubMed link. Those will show up as unmatched repository records at accession resolution.
-- 10 studies were screened from abstracts only. Their fields are mostly NR until the full text is read.
 - Shared datasets: Zhang2024/Dou2025, Zhao2024a/b and the B144 vs Q319 papers (Yu2021, Yu2023, Yu2024) probably reuse libraries. This gets checked at accession resolution by comparing run lists.
 
 ## Next steps (after Rubén's review)

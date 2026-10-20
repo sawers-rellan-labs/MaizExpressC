@@ -4,7 +4,8 @@
 Inputs : catalogue/build/agent_out/pubmed_batch_*.tsv, web_literature.tsv (agent extractions),
          manual_additions.tsv (studies added by hand from dataset leads),
          catalogue/build/agent_out/related_reports.tsv (RELATED items from the agents' reports)
-Outputs: catalogue/maize_cold_rnaseq_studies.tsv  one row per included study
+Outputs: catalogue/maize_cold_rnaseq_studies.tsv  one row per core study
+         catalogue/maize_cold_not_core.tsv        borderline / tentative studies left out, with the reason
          catalogue/maize_cold_related.tsv         microarray / small RNA / reanalysis / ambiguous items
 Usage (project root): python3 catalogue/build/build_catalogue.py
 """
@@ -139,6 +140,16 @@ for o in out:
     o["accession_harvested"] = "; ".join(f"{a_} ({', '.join(sorted(v))})" for a_, v in sorted(h_.items()))
     if o["accession_status"] == "to resolve" and h_:
         o["accession_status"] = "found by harvester"
+
+# keep only core studies (Rubén, 20 Oct 2026); borderline and tentative ones are listed separately
+not_core = [o for o in out if o["fit"] != "core"]
+out = [o for o in out if o["fit"] == "core"]
+with open(CAT / "maize_cold_not_core.tsv", "w", encoding="utf-8", newline="") as fh:
+    w = csv.writer(fh, delimiter="\t", lineterminator="\n")
+    w.writerow(["study_id", "fit", "fit_note", "year", "title", "doi_url", "pmid"])
+    for o in sorted(not_core, key=lambda o: o["study_id"]):
+        w.writerow([o.get(c, "") for c in ("study_id", "fit", "fit_note", "year", "title", "doi_url", "pmid")])
+print("not core (left out):", ", ".join(f"{o['study_id']} [{o['fit']}]" for o in not_core))
 
 ids = Counter(o["study_id"] for o in out)
 clash = [i for i, n in ids.items() if n > 1]
