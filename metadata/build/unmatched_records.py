@@ -28,9 +28,13 @@ for r in csv.DictReader(open(BUILD / "repo_geo_maize_cold.tsv"), delimiter="\t")
     if "high throughput" in r["gdstype"].lower() and r["accession"] not in known and r["bioproject"] not in known:
         rows.append({"accession": r["accession"], "kind": "GEO series", "date": r["pdat"][:10], "n_runs": r["n_samples"],
                      "submitter": "", "title": r["title"], "example_samples": f"PMID {r['pubmed']}" if r["pubmed"] else ""})
+COLDISH = re.compile(r"cold|chill|low[- ]?temp|freez|frost|°C|temperature|highland", re.I)
+NOT_RNA = re.compile(r"small RNA|miRNA|nucleosome|methylation|ChIP|ATAC|MOA-seq|CUT&Tag", re.I)
+for r in rows:
+    r["likely_cold_rnaseq"] = "yes" if COLDISH.search(r["title"] + " " + r["example_samples"]) and not NOT_RNA.search(r["title"]) else ""
 rows.sort(key=lambda r: -int(r["n_runs"] or 0))
 with open(BUILD / "uncatalogued_repository_records.tsv", "w", newline="") as f:
-    w = csv.DictWriter(f, ["accession", "kind", "date", "n_runs", "submitter", "title", "example_samples"], delimiter="\t")
+    w = csv.DictWriter(f, ["accession", "kind", "date", "n_runs", "submitter", "title", "example_samples", "likely_cold_rnaseq"], delimiter="\t")
     w.writeheader()
     w.writerows(rows)
-print(f"{len(rows)} unmatched records")
+print(f"{len(rows)} unmatched records, {sum(1 for r in rows if r['likely_cold_rnaseq'])} likely cold RNA-seq")

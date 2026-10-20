@@ -1,7 +1,6 @@
 study_id	fit	fit_note	year	title	doi_url	pmid
 Cackett2023	tentative	Preprint; design from search snippets only.	2023	High light can alleviate chilling stress in maize	https://doi.org/10.1101/2023.03.07.531599	NR (preprint; not found in PubMed)
 Cheng2025	tentative	Abstract only; tissue, time points and libraries not confirmed.	2025	Evaluation of cold tolerance in maize diversity panel and transcriptome analysis of two extreme genotypes under cold stress	https://doi.org/10.1016/j.plaphy.2025.110744	41237517
-Gao2024	tentative	Abstract only; a cold vs control RNA-seq design is not stated.	2024	Genetic variation in a heat shock transcription factor modulates cold tolerance in maize	https://doi.org/10.1016/j.molp.2024.07.015	39095994
 Han2025	tentative	Abstract only; temperatures, tissues and design not confirmed.	2025	Tissue-specific chromatin accessibility and transcriptional regulation in maize cold stress response	https://doi.org/10.1016/j.ygeno.2024.110981	39701501
 He2023b	tentative	Abstract only; replicates, libraries and platform not confirmed.	2023	QTL-seq and transcriptomic integrative analyses reveal two positively regulated genes that control the low-temperature germination ability of MTP-maize introgression lines	https://doi.org/10.1007/s00122-023-04362-6	37093290
 James2026	tentative	Preprint; design from the abstract only.	2026	Multi-omic analysis of maize NILs for chilling tolerance QTLs uncover regulatory and metabolic signatures	https://doi.org/10.64898/2026.03.04.709568	NR (preprint; not found in PubMed)

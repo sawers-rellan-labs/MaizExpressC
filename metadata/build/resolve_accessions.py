@@ -81,6 +81,11 @@ D = [
     ("Zhao2024b", "PRJNA1096968", "unavailable", S, "agent", "Linked by design match to Zhao2024a", "Same RNA-seq as Zhao2024a; not public."),
     ("Zhou2022", "PRJNA747925", "resolved", PT, "paper_statement", "Paper (PMC)", "291 runs: heat and cold time courses across genotypes; keep cold and controls."),
     ("Zhou2024", "PRJNA852372", "resolved", P, "paper_statement", "Accession numbers section (OUP page)", "160 runs, DNBSEQ: cell-type / tissue-resolved root samples (cortex, endodermis, epidermis, pericycle) under cold."),
+    ("Crow2020", "PRJNA640392", "resolved", P, "paper_statement", "PLOS data availability statement; PMC and Europe PMC full text", "346 runs (paper analysed 379 samples): Inv4m vs B73 alleles, 9 tissues, cool 22/11 °C vs warm 32/22 °C chambers from sowing."),
+    ("Gao2024", "PRJNA996745", "resolved", P, "repository_match", "SRA titles 'Maize leaf_hsf21_cold-treated_12h' (China Agricultural University); paper full text not readable (Mol Plant)", "15 runs: 12 RNA-seq (leaf, WT vs hsf21, cold 12 h and controls), 3 DAP-seq. Keep the RNA-seq."),
+    ("Jiang2022", "PRJNA779257", "resolved", P, "repository_match", "SRA titles 'RNAseq 12h cold treated WT / zmice1-1' (China Agricultural University); paper data statement per search summary", "14 runs: 12 RNA-seq (WT vs zmice1-1, 25 vs 4 °C 12 h), 2 ChIP-seq. Keep the RNA-seq."),
+    ("Liao2026", "PRJDB41168", "ambiguous", R, "repository_match", "Sample titles WT/nla x 25/4 °C x 3, LH244 leaf (mirror of CNCB PRJCA041350); the paper's data statement seen lists no accession", "12 runs. Design and genotype match the paper; confirm ownership at M2."),
+    ("Zeng2024", "PRJNA1054219", "resolved", P, "paper_statement", "PMC and Europe PMC full-text scan; SRA titles match", "8 runs: LH244 WT vs TIP4;3-OE, room temperature vs 4 °C 12 h, 2 reps."),
     ("Zhou2026", "PRJNA1378803", "unavailable", P, "paper_statement", "Paper (PMC, Europe PMC)", "Not public in NCBI (checked 20 Oct 2026)."),
 ]
 

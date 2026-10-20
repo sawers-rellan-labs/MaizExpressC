@@ -36,6 +36,11 @@ EXTRA = {
     "Han2026": [("CRA027029", "data availability statement on the Springer page")],
     "Zhou2024": [("PRJNA852372", "accession numbers section on the OUP page")],
     "Gu2017": [("PRJNA361019", "BioProject of SRX2672484 (found by the harvester)")],
+    "Jiang2022": [("PRJNA779257", "SRA titles 'RNAseq 12h cold treated WT / zmice1-1' (China Agricultural University)")],
+    "Zeng2024": [("PRJNA1054219", "SRA titles: 14-day-old seedlings, room temperature vs 4 °C 12 h (China Agricultural University)")],
+    "Gao2024": [("PRJNA996745", "SRA titles 'Maize leaf_hsf21_cold-treated_12h' (China Agricultural University)")],
+    "Liao2026": [("PRJDB41168", "sample titles WT/nla x 25/4 °C x 3 (mirror of CNCB PRJCA041350)")],
+    "Crow2020": [("PRJNA640392", "PLOS data availability statement")],
     "Jia2020": [("PRJNA598312", "University of Nebraska RDM4 project; leaf RNA-seq at 28, 10 and 2 °C (SRA titles), matching the paper's design")],
     "Yu2024": [("PRJNA666026", "repository match: B144/Q319 project; the paper says no new data were created")],
 }

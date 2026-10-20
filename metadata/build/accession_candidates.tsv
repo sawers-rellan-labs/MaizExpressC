@@ -2,9 +2,11 @@ study_id	accession	source
 Avila2018	PRJNA492469	catalogue (agent: paper)
 Avila2018	SRP162337	Europe PMC annotation; Europe PMC full text; PMC full text
 Bozic2025	PRJEB80094	Europe PMC full text; PMC full text; catalogue (agent: paper)
+Crow2020	PRJNA640392	Europe PMC full text; PLOS data availability statement; PMC full text; catalogue (agent: paper)
 Dou2025	PRJNA1050059	Europe PMC full text; PMC full text; catalogue (agent: paper)
 Frey2020	PRJNA556806	Europe PMC annotation; Europe PMC full text; PMC full text; catalogue (agent: paper)
 Friero2023	PRJNA877073	repository match: 'Molecular signatures of temperature-dependent root meristem growth in maize'
+Gao2024	PRJNA996745	SRA titles 'Maize leaf_hsf21_cold-treated_12h' (China Agricultural University); catalogue (agent: web search, unverified)
 Gu2017	PRJNA361019	BioProject of SRX2672484 (found by the harvester)
 Han2026	CRA027029	data availability statement on the Springer page
 He2016	SRP093477	Europe PMC annotation; Europe PMC full text; PMC full text; catalogue (agent: paper)
@@ -12,6 +14,7 @@ He2023a	CRA007319	Europe PMC full text; PMC full text
 He2023a	PRJCA010234	Europe PMC full text; PMC full text
 Jia2020	PRJNA306879	catalogue (agent: paper)
 Jia2020	PRJNA598312	University of Nebraska RDM4 project; leaf RNA-seq at 28, 10 and 2 °C (SRA titles), matching the paper's design
+Jiang2022	PRJNA779257	SRA titles 'RNAseq 12h cold treated WT / zmice1-1' (China Agricultural University); catalogue (agent: paper or web search)
 Jiang2023	PRJNA911416	Europe PMC full text; PMC full text
 Li2016	SRP065916	Europe PMC annotation; Europe PMC full text; PMC full text
 Li2017	SRP080208	Europe PMC annotation; Europe PMC full text; PMC full text; catalogue (agent: paper)
@@ -21,6 +24,7 @@ Li2022b	PRJNA822071	Europe PMC full text; PMC full text
 Li2022c	PRJNA778546	catalogue (agent: paper or web search)
 Li2022d	PRJNA759333	Europe PMC full text; PMC full text
 Li2025	GSE299259	Europe PMC full text; PMC full text
+Liao2026	PRJDB41168	catalogue (agent: web search, unverified); sample titles WT/nla x 25/4 °C x 3 (mirror of CNCB PRJCA041350)
 Liu2026	PRJNA1393347	Europe PMC full text; PMC full text
 Lu2017	GSE76939	Europe PMC full text; NCBI PubMed link; PMC full text; catalogue (agent: paper)
 Lu2017	PRJNA309111	NCBI PubMed link
@@ -51,6 +55,7 @@ Yu2023	PRJNA666026	Europe PMC annotation; Europe PMC full text; PMC full text; c
 Yu2024	PRJNA666026	repository match: B144/Q319 project; the paper says no new data were created
 Zeng2021	PRJNA344653	Europe PMC full text; PMC full text
 Zeng2021	SRP327817	Europe PMC full text; PMC full text
+Zeng2024	PRJNA1054219	Europe PMC full text; PMC full text; SRA titles: 14-day-old seedlings, room temperature vs 4 °C 12 h (China Agricultural University); catalogue (agent: web search, unverified)
 Zhang2017	PRJNA344653	NCBI PubMed link; catalogue (agent: paper)
 Zhang2017	SRP090583	NCBI PubMed link
 Zhang2020	GSE146666	Europe PMC annotation; Europe PMC full text; NCBI PubMed link; PMC full text; catalogue (agent: paper or web search)

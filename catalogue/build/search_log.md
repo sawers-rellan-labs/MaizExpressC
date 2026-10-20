@@ -45,6 +45,10 @@ Each batch was screened by a subagent with the rules in `agent_instructions.md`.
 
 Kept the 50 core studies. The 3 borderline and 10 tentative studies were left out; they are listed in `catalogue/maize_cold_not_core.tsv`.
 
+## 7. Unmatched repository records (20 Oct 2026)
+
+Maize cold RNA-seq records that matched no catalogue study were traced to papers: a Europe PMC full-text search for each accession (`metadata/build/find_record_papers.py`), PubMed searches built from each record's title, and an agent screen of the candidate papers. Rubén added Jiang2022, Zeng2024, Gao2024, Liao2026 and Crow2020, and left out datasets without a paper (`catalogue/maize_cold_candidate_additions.tsv`). Four of the five are gene-function papers from China Agricultural University whose abstracts do not mention RNA-seq, which is why keyword screening missed them.
+
 ## Known limits
 
 - The PubMed full-text tool used by the agents drops data-availability sections; the harvester recovers many of them, but 15 core studies still have no accession.

@@ -20,7 +20,8 @@ BUILD = Path(__file__).resolve().parent
 CAT = BUILD.parent
 
 rows = []
-for f in sorted(glob.glob(str(BUILD / "agent_out" / "pubmed_batch_*.tsv"))) + [str(BUILD / "agent_out" / "web_literature.tsv"), str(BUILD / "agent_out" / "manual_additions.tsv")]:
+for f in sorted(glob.glob(str(BUILD / "agent_out" / "pubmed_batch_*.tsv"))) + [str(BUILD / "agent_out" / "web_literature.tsv"), str(BUILD / "agent_out" / "manual_additions.tsv"),
+                                                                           str(BUILD / "agent_out" / "dataset_followup.tsv")]:
     if Path(f).exists():
         with open(f, encoding="utf-8") as fh:
             for r in csv.DictReader(fh, delimiter="\t", quoting=csv.QUOTE_NONE):
@@ -60,7 +61,14 @@ OV = {
     # fit
     '39766968': dict(fit='borderline', fit_note='Post-harvest storage of detached sweet corn kernels at 4 vs 28 °C, not cold stress of plants.'),
     '36616288': dict(fit='borderline', fit_note='Cold test per Methods: seeds soaked at 4 °C for 3 d, then germinated at 25 °C; check the design.'),
-    '39095994': dict(fit='tentative', fit_note='Abstract only; a cold vs control RNA-seq design is not stated.'),
+    '39095994': dict(accession='PRJNA996745', acc_status='repository match', design_category='MUTANT+CHILL',
+                     acc_note='SRA titles "Maize leaf_hsf21_cold-treated_12h" (China Agricultural University); 12 RNA-seq + 3 DAP-seq runs.',
+                     fit_note='Re-added by Rubén (20 Oct 2026) once its cold RNA-seq dataset was found; full text not read.'),
+    '33270639': dict(fit_note='Added by Rubén (20 Oct 2026). Chronic growth temperature: cool 22/11 °C vs warm 32/22 °C chambers from sowing, not an acute cold treatment.'),
+    '36241735': dict(fit_note='Added by Rubén (20 Oct 2026) from the unmatched-dataset search.'),
+    '39024420': dict(fit_note='Added by Rubén (20 Oct 2026) from the unmatched-dataset search.', acc_status='repository match',
+                     acc_note='Paper text gives no accession; SRA titles and design (8 runs) match.'),
+    '41741638': dict(acc_status='repository match', acc_note='Design and genotype match; submitter blank, ownership to confirm at M2.'),
     '39701501': dict(fit='tentative', fit_note='Abstract only; temperatures, tissues and design not confirmed.'),
     '32505784': dict(fit='tentative', fit_note='Abstract only (AMF x low temperature); genotype, temperatures and design not confirmed.'),
     '31217070': dict(fit='tentative', fit_note='Abstract only; temperature, tissue and replicates not reported there.'),
@@ -104,7 +112,7 @@ for d in rows:
     seen[k] = d.get("study_id", "")
     o = dict(d)
     ov = OV.get(k, {})
-    for f in ("study_id", "accession"):
+    for f in ("study_id", "accession", "design_category", "tissue", "cold_treatments", "control_temperature", "genotypes"):
         if f in ov:
             o[f] = ov[f]
     toks = list(dict.fromkeys(TOK.findall(o.get("accession", ""))))
