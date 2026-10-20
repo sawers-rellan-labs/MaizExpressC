@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""List maize nitrogen records in NCBI BioProject and GEO, for title matching.
+"""List maize cold records in NCBI BioProject, GEO and SRA, for title matching.
 
-Writes metadata/build/repo_bioproject_maize_N.tsv and repo_geo_maize_N.tsv.
+Writes metadata/build/repo_bioproject_maize_cold.tsv, repo_geo_maize_cold.tsv and repo_sra_maize_cold.tsv.
 Studies without an accession in the paper are matched against these by hand
 (title words, genotypes, tissue, submitter, dates).
 
@@ -17,8 +17,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import harvest_accessions as h  # noqa: E402
 
 BUILD = h.BUILD
-N_TERMS = ('(nitrogen OR nitrate OR ammonium OR "low N" OR "N deficiency" OR '
-           '"N starvation" OR "N stress" OR "N supply" OR urea OR NUE)')
+N_TERMS = ('(cold OR chilling OR "low temperature" OR "low-temperature" OR freezing OR frost OR '
+           '"cold stress" OR "chilling stress" OR "cold tolerance" OR "chilling tolerance" OR "4 degrees")')
 
 
 def esearch_all(db, term):
@@ -57,7 +57,7 @@ def main():
             "data_type": clean(d.get("project_data_type", "")),
             "description": clean(d.get("project_description", ""))[:600],
         })
-    path = BUILD / "repo_bioproject_maize_N.tsv"
+    path = BUILD / "repo_bioproject_maize_cold.tsv"
     with open(path, "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0]), delimiter="\t")
         w.writeheader()
@@ -79,7 +79,7 @@ def main():
             "pubmed": ";".join(str(x) for x in d.get("pubmedids", [])),
             "summary": clean(d.get("summary", ""))[:600],
         })
-    path = BUILD / "repo_geo_maize_N.tsv"
+    path = BUILD / "repo_geo_maize_cold.tsv"
     with open(path, "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0]), delimiter="\t")
         w.writeheader()
@@ -87,7 +87,7 @@ def main():
     print(f"{len(rows)} GEO series -> {path}", file=sys.stderr)
 
     # SRA experiments, grouped by BioProject: catches projects whose titles are
-    # generic ("Zea mays Raw sequence reads") but whose experiments mention N.
+    # generic ("Zea mays Raw sequence reads") but whose experiments mention cold.
     ids = esearch_all("sra", f'{N_TERMS} AND "Zea mays"[Organism] AND "transcriptomic"[Source]')
     by_proj = {}
     for d in esummary("sra", ids):
@@ -110,7 +110,7 @@ def main():
     for p in by_proj.values():
         p["example_titles"] = " | ".join(p["example_titles"])
         rows.append(p)
-    path = BUILD / "repo_sra_maize_N.tsv"
+    path = BUILD / "repo_sra_maize_cold.tsv"
     with open(path, "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0]), delimiter="\t")
         w.writeheader()

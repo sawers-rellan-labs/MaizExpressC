@@ -1,0 +1,11 @@
+label	link	why	source
+PMC11595045	https://pmc.ncbi.nlm.nih.gov/articles/PMC11595045/	Multi-omics of maize seedlings at low temperature (B144/Q319 leaves, 24 h); may share data with Yu2023	batch 4
+PRJNA244661	https://www.ncbi.nlm.nih.gov/bioproject/PRJNA244661	Public B73 4 C vs control RNA-seq used by reanalysis papers; find the primary study (possibly the qTeller multi-stress set)	batch 1
+SRX2672484	https://www.ncbi.nlm.nih.gov/sra/SRX2672484	Cold RNA-seq of He-344 leaves (5 C, 3 d) from the Zhao2019 group; find its BioProject and paper	batch 7
+PRJNA309111	https://www.ncbi.nlm.nih.gov/bioproject/PRJNA309111	Public maize 4 C 12 h vs control RNA-seq used by reanalysis papers; find the primary study	batch 2
+Pardo2025 supplement	https://pubmed.ncbi.nlm.nih.gov/41092016/	Meta-analysis lists 8 cold BioProjects; cross-check against the catalogue	batch 2
+40648063	https://pubmed.ncbi.nlm.nih.gov/40648063/	ZmMYBR24 paper cites an earlier cold transcriptome from the same group	batch 2
+PRJNA705456	https://www.ncbi.nlm.nih.gov/bioproject/PRJNA705456	Cold shoot/root RNA-seq (Xue 2021, WGCNA) used by reanalysis papers; check whether its paper is in the catalogue	batch 3
+PRJNA344653	https://www.ncbi.nlm.nih.gov/bioproject/PRJNA344653	Cold RNA-seq used by reanalysis papers (also cited as PRJNA343268); find the primary study	batch 3
+33133117	https://pubmed.ncbi.nlm.nih.gov/33133117/	Survey of published maize cold transcriptome studies; cross-check the catalogue	batch 6
+PRJNA657262	https://www.ncbi.nlm.nih.gov/bioproject/PRJNA657262	Maize cold RNA-seq reused by Meng2021 (PNAS); find the primary study	web

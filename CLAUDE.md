@@ -37,6 +37,8 @@ Sibling of **MaizExpressN** (nitrogen): `/Users/rra/Documents/MaizExpressN`, htt
 
 ## Decisions so far (20 Oct 2026)
 - Created from MaizExpressN (Rubén, 20 Oct 2026: "copy the infrastructure ... and create a parallel folder/repository; then do a search of papers that have studied cold stress in maize"). Name as Rubén wrote it: MaizeExpressC. Local git repository; no GitHub repository yet.
+- M1 catalogue, first pass (20 Oct 2026; checkpoint pending Rubén's review): `catalogue/maize_cold_rnaseq_studies.tsv`, 63 studies (`fit`: 50 core, 3 borderline, 10 tentative), plus `maize_cold_related.tsv` and `maize_cold_to_check.tsv`. How it was built: `catalogue/build/search_log.md`. That means PubMed (10 queries, 718 PMIDs, logged keyword pre-screen, 11 screening batches), a dataset-to-paper step (maize cold BioProjects and GEO series linked to PubMed; this found Makarevitch2015, whose abstract never says cold), a web/preprint search, and the accession harvester (full-text XML scan and NCBI links). Rebuild with `python3 catalogue/build/build_catalogue.py`; manual curation is in its `OV` table.
+- NCBI E-utilities, Europe PMC and the ENA Portal API work from the Mac (unlike the cloud workspace used for the N catalogue). Publisher pages (Elsevier, Springer, Wiley, MDPI) often block scripted fetches.
 
 ## Inherited facts and lessons from MaizExpressN (Hazel, pipeline, analysis, app)
 Paths and study names below refer to MaizExpressN; the same setup applies here.

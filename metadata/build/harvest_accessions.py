@@ -25,7 +25,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-CATALOGUE = ROOT / "catalogue" / "maize_N_rnaseq_studies.tsv"
+CATALOGUE = ROOT / "catalogue" / "maize_cold_rnaseq_studies.tsv"
 BUILD = ROOT / "metadata" / "build"
 CACHE = BUILD / "cache"
 OUT = BUILD / "accession_evidence.tsv"

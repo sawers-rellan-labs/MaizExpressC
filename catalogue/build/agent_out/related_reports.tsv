@@ -1,0 +1,64 @@
+pmid	label	data_type	accession	description	source
+18643947	Fernandes2008	ambiguous (probably MPSS, unconfirmed)	none stated	Six abiotic stresses incl. cold vs light-grown seedlings; platform unconfirmed	batch 10
+15235000	(PMID 15235000)	microarray (aquaporins, roots)	none stated	Root chilling 5.5 C for 24 h; water relations	batch 10
+26897027	Sobkowiak2016	microarray (3 inbreds, cold acclimation)	E-MEXP-3508	Contrasting cold-sensitivity lines, field and growth chamber	batch 9
+24623520	Sobkowiak2014	microarray (ETH-DH7 vs ETH-DL3, 8/6 C 14 h)	E-MTAB-1315	Tolerant vs sensitive inbreds, V3 leaf	batch 9
+23881393	Rodriguez2013	microarray (Affymetrix, A661 leaves)	GSE41956	Cold-then-recovery leaf sections; cold vs control by qPCR only	batch 9
+23822863	Schluter2013	microarray (Agilent)	not found	Source leaf under low temperature, low N, low P; with metabolome	batch 9
+38750515	Bozic2024	small RNA (miRNA-seq)	not found	Tolerant vs sensitive inbred, 10/8 C for 6 and 24 h	batch 4
+38077131	Chowdhury2023	reanalysis + metabolic model	GSE235654 (AMF, not cold)	B73 cold/heat/control transcriptomes from the literature; source dataset unidentified	batch 4
+37429215	Zhang2023	ambiguous (abstract only)	none stated	SCL127 vs SCL326 low-temperature germination 0-48 h; control unconfirmed	batch 4
+37481121	Gao2024	ambiguous (abstract only)	none stated	Lipidomics + transcriptomics + mutants for cold tolerance; design unknown	batch 4
+37975618	Chen2023	ambiguous (abstract only)	none stated	AgNP seed priming; RNA-seq likely priming vs unprimed, no cold contrast	batch 4
+41754317	TangX2026	ambiguous	not found	ZmbHLH30 OE/KO in B104; RNA-seq OE vs WT at 10 C only, embryos	batch 1
+42651817	HanS2026	reanalysis	qTeller multi-stress; PRJNA511671 (drought)	Fibrillin family; drought/salt qPCR	batch 1
+42483500	Cao2026	reanalysis	qTeller (cold, heat, salt, UV)	ZmBED family; drought qPCR	batch 1
+42255300	Guo2026	reanalysis	qTeller (drought, cold, heat)	ABF family; ZmABF8 drought	batch 1
+41892273	Sun2026	reanalysis	PRJNA244661 (public B73 4 C vs control)	ZmDUF966 family; cold qPCR	batch 1
+42720865	Zhao2026	ambiguous (no PMC text)	not stated	4CL pan-genome; cold/drought qPCR	batch 1
+42467276	Mensah2026	ambiguous (no PMC text)	not stated	F3H family; cold/heat/waterlogging profiling; VIGS	batch 1
+42275105	Xu2026	ambiguous (no PMC text)	not found	ZmBOIR3, 299 inbreds, low-temperature tolerance, EMS mutant; RNA-seq design unconfirmed	batch 1
+41955741	Jing2026	ambiguous (no PMC text)	not found	Cold-drought co-stress 0.5-12 h, transcriptome + phosphoproteome	batch 1
+31907623	Aydinoglu2020	ambiguous (miRNA profiling, platform unconfirmed)	none stated	Chilling-treated ADA313 leaf zones, miRNome	batch 7
+31729949	Lv2019	reanalysis	Table S1 (91 public Illumina + 36 Iso-Seq)	lncRNA discovery; cold/heat/salt/drought B73 leaves	batch 7
+31210171	Zhao2019	reanalysis	SRX2672484 (own earlier cold data); Makarevitch heat runs	FAD family from earlier cold and heat RNA-seq	batch 7
+41092016	Pardo2025	reanalysis (meta-analysis)	39 BioProjects (8 cold), in supplement	~1,900 public maize stress RNA-seq samples; core stress genes	batch 2
+41634595	Zhang2026	reanalysis	PRJNA309111 + qTeller B73	RPA family; public cold RNA-seq	batch 2
+41595466	Wang2025	reanalysis	PRJNA171684; PRJNA344653	BBX pan-genome family; own 4 C qPCR	batch 2
+41245464	Li2025m6A	reanalysis	none stated	m6A MTA family; own 5 C qPCR	batch 2
+41036403	Li2025WAK	reanalysis	PRJNA645274	WAK family; own RNA-seq hormone-only	batch 2
+40739182	Cao2025	reanalysis	none stated (MaizeGDB cold/heat/UV)	FLA family	batch 2
+40442593	Gu2025	reanalysis	none stated (MaizeGDB)	CPP family; own 4 C qPCR	batch 2
+40362511	Huang2025	reanalysis	PRJNA309111 (maize 4 C 12 h)	Poaceae HSP family	batch 2
+40898023	Xie2025	reanalysis	PRJNA244661 (B73 shoot cold/heat/salt); PRJNA291919	Dehydrin family	batch 2
+40057047	Han2025	ambiguous (no PMC text)	not found	ZmSE1B-OE vs WT germinating seeds at low temperature, RNA-seq + CUT&Tag; control unconfirmed	batch 2
+40027706	(bioRxiv 2025, same as Pardo2025)	reanalysis (meta-analysis preprint)	39 BioProjects (8 cold)	~1,900 public stress RNA-seq samples	batch 3
+39962090	Annexin2025	reanalysis	PRJNA344653; PRJNA343268; PRJNA705456 (Xue2021 cold shoot/root); others	Annexin family; own 4 C qPCR	batch 3
+39529933	CASPL2024	reanalysis	PRJNA244661; PRJEB35943	CASPL family	batch 3
+39273972	DnaJ2024	reanalysis (Makarevitch cold/heat/salt)	none stated	DnaJ family; heat qPCR	batch 3
+39754085	BAG2025	reanalysis (Springer lab cold/heat/salt)	none stated	BAG family; heat qPCR	batch 3
+39356644	Hu2024	ambiguous	none found	AMF vs non-AMF leaf transcriptome + lipidome under low temperature; control unconfirmed	batch 3
+30533052	Tang2018	reanalysis (circRNA)	SRP041183 (cold/heat/salt/UV seedlings) and others	circRNAs from public RNA-seq	batch 8
+28852597	Aguilar-Rangel2017	reanalysis/ambiguous	Makarevitch B73 5 C 16 h set	Allele-specific expression vs published B73 stress responses	batch 8
+28539927	Mei2017	reanalysis	not stated (B73 and Mo17 5 C 16 h)	Alternative splicing from public cold/heat RNA-seq	batch 8
+28828699	Jonczyk2017	microarray	none stated	Leaves, severe cold 8 C with diel rhythm	batch 8
+29971088	Szalai2018	microarray	GSE107913	Light intensity during 15 C acclimation then 5 C chilling	batch 8
+28168096	DiFenza2017	microarray	GSE72508	Primary roots 12/6 vs 18/12 C, four varieties	batch 8
+35050102	Han2022	ambiguous (RNA-seq at 10 C only, no warm control)	none stated	Low-temperature germination QTL plus B73 vs Mo17 RNA-seq	batch 6
+34681032	Waititu2021	ambiguous (field cold spell, no warm control)	CRA003678	24 tolerant vs 22 sensitive lines, leaves after natural field cold	batch 6
+34242344	Goering2021	reanalysis	none stated	QTL mapping; reuses earlier B73/Mo17 cold RNA-seq	batch 6
+34192648	Li2021b	reanalysis	none	GA2ox family; published RNA-seq + qPCR	batch 6
+33582802	Guo2021	ambiguous (platform not stated)	not found	B73 drought, cold and combined stress with recovery	batch 6
+34544007	Mira2021	ambiguous (no PMCID)	not found	ZmPgb1.1 over-expression/suppression under 10/4 C	batch 6
+34115469	Xiang2021	ambiguous (no PMCID)	not found	Sweet corn seedlings, low and high temperature; transcriptome	batch 6
+34851527	Majlath2022	ambiguous	not found	Methylglyoxal-primed germination at 13 C, A654 and Cm174	batch 6
+37312966	Xu2022	ambiguous (QTL + RNA-seq, IBM Syn10 DH low-temperature germination)	none found	RNA-seq design unconfirmed	batch 5
+36835269	Zhang2023RBOH	reanalysis (public B73/Oh43 seedling 4 C 16 h)	not stated	RBOH family bioinformatics	batch 5
+36070250	Nie2022	ambiguous (cold transcriptome across angiosperms)	PRJNA767196 (NCBI-linked)	CBF/DREB1 evolution in angiosperms; abstract only	dataset batch
+30537259	Hoopes2019	reanalysis (gene atlas incl. 5 public stress datasets)	Dryad 10.5061/dryad.5p58q34	Includes Makarevitch2015 stress data	web
+38816789	Hayford2024	reanalysis (24 public B73 datasets remapped to v5)	cold from PRJNA335771	qTeller/MaizeGDB v5 expression	web
+33658387	Meng2021	reanalysis for maize (new RNA-seq in other panicoids PRJNA650146)	PRJNA657262; PRJNA645274	Panicoid cold responses	web
+NR	Achour2019	ambiguous (bioRxiv; WGBS of cold-treated maize; RNA-seq unconfirmed)	none found	14/10 C vs greenhouse control at emergence	web
+NR	DurandGarzon2019	ambiguous (conference poster; leaf mRNA-seq of two sister dent lines)	none	Contrasting chilling tolerance, 574 DEGs	web
+NR	ZmNTL2025	reanalysis (Acta Agron Sin 2025)	not seen	ZmNTL1/ZmNTL5 CRISPR knockout + public RNA-seq	web
+NR	GSE9453	microarray	GSE9453	B73 six abiotic perturbations including cold	web
