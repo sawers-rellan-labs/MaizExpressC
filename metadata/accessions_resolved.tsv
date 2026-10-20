@@ -49,6 +49,7 @@ Yu2023	PRJNA666026	BioProject	NCBI SRA		resolved	shared	paper_statement	18	PMC f
 Yu2024	PRJNA666026	BioProject	NCBI SRA		resolved	shared	paper_statement	18	Data availability: 'No new data were created' (PMC web page); B144/Q319 project	Reuses Yu2021's libraries.
 Zeng2021	SRP327817	SRA study	NCBI SRA		resolved	primary	harvested	8	PMC full-text scan	8 runs (ZmRR1-dependent cold responses).
 Zeng2021	PRJNA344653	BioProject	NCBI SRA		resolved	exclude	harvested	36	Cited in the text	Zhang2017's dataset, cited for comparison; not Zeng2021's data.
+Zhang2017	PRJNA343268	BioProject	NCBI SRA		resolved	partial	paper_statement	6	Cited in the paper (PMC web page) for the greenhouse 1-day cold vs control experiment	Cold stress and control on panicoid grass species (University of Nebraska); keep the maize runs.
 Zhang2017	PRJNA344653	BioProject	NCBI SRA		resolved	partial	repository_pubmed_link	36	NCBI PubMed link	108 runs: maize, sorghum and setaria; 36 Zea mays runs (cold time course).
 Zhang2020	GSE146666	GEO series	NCBI GEO	PRJNA611589; SRP252094	resolved	primary	paper_statement	12	GEO record links the PMID; Europe PMC annotation	12 runs (BioProject PRJNA611589).
 Zhang2024	PRJNA1050059	BioProject	NCBI SRA		resolved	primary	paper_statement	12	Paper (PMC)	12 runs; also cited by Dou2025.

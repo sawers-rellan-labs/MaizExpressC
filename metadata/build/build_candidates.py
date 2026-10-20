@@ -41,6 +41,7 @@ EXTRA = {
     "Gao2024": [("PRJNA996745", "SRA titles 'Maize leaf_hsf21_cold-treated_12h' (China Agricultural University)")],
     "Liao2026": [("PRJDB41168", "sample titles WT/nla x 25/4 °C x 3 (mirror of CNCB PRJCA041350)")],
     "Crow2020": [("PRJNA640392", "PLOS data availability statement")],
+    "Zhang2017": [("PRJNA343268", "cited in the paper for the greenhouse 1-day cold vs control experiment (sample-sheet curation)")],
     "Jia2020": [("PRJNA598312", "University of Nebraska RDM4 project; leaf RNA-seq at 28, 10 and 2 °C (SRA titles), matching the paper's design")],
     "Yu2024": [("PRJNA666026", "repository match: B144/Q319 project; the paper says no new data were created")],
 }

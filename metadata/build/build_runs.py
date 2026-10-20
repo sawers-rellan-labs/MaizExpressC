@@ -135,13 +135,15 @@ def ena_library_names(acc):
 
 @rule("Makarevitch2015")
 def _(r):
-    m = re.search(r"_(heat|salt|UV)\b", r["alias"])
+    m = re.search(r"_(heat|salt|UV)(_|$)", r["alias"])
     if m:
         return f"{m.group(1)} treatment, no cold contrast"
 
 
 @rule("Li2020a")
 def _(r):
+    if r["run_accession"].startswith("SRR122149"):
+        return "duplicate upload: each library was re-uploaded in Aug 2021 (SRR122478xx-9xx, identical read counts); the re-upload is kept"
     if "high temperature" in r["attrs"].get("tissue", "") + r["attrs"].get("treatment", "") + r["sample_title"]:
         return "heat treatment, no cold contrast"
 
@@ -158,6 +160,39 @@ def _(r):
         return "heat treatment, no cold contrast"
     if re.match(r"(SD|MD)-", r["alias"]):
         return "drought treatment, no cold contrast"
+
+
+LI2016_DUP = {"SRR2911073": "SRR3039751", "SRR2911287": "SRR3039752", "SRR2911288": "SRR3039753",
+              "SRR2911289": "SRR3039754", "SRR2919276": "SRR3039748"}
+
+
+@rule("Li2016")
+def _(r):
+    if r["run_accession"] in LI2016_DUP:
+        return f"duplicate upload of {LI2016_DUP[r['run_accession']]} (identical read and base counts; second deposit kept)"
+
+
+@rule("Li2017")
+def _(r):
+    m = re.match(r"(Salinity|Drought|Heat)", r["alias"]) or re.search(r"(Salinity|Drought|Heat)", r["sample_title"])
+    if m:
+        return f"{m.group(1).lower()} treatment, no cold contrast"
+
+
+@rule("Lu2017")
+def _(r):
+    if r["run_accession"] in ("SRR3105598", "SRR3105599"):
+        return "drought (PEG) treatment, no cold contrast"
+
+
+ZENG_WT_DUP = {"SRR27298838": "SRR15096597", "SRR27298837": "SRR15096596",
+               "SRR27298836": "SRR15096595", "SRR27298835": "SRR15096594"}
+
+
+@rule("Zeng2024")
+def _(r):
+    if r["run_accession"] in ZENG_WT_DUP:
+        return f"duplicate upload of Zeng2021's {ZENG_WT_DUP[r['run_accession']]} (identical read and base counts); curated under Zeng2021"
 
 
 @rule("Jia2020")
@@ -285,7 +320,9 @@ OWNER = {"PRJNA1050059": "Zhang2024",     # Dou2025 reuses Zhang2024's libraries
 REVIEW_INCLUDED = {"Friero2023", "Liao2026"}
 GSA_PROJECT = {"CRA007319": "PRJCA010234"}   # CNCB run set -> BioProject (GSA page)
 SPLIT = {}       # accession -> function(row) -> (owner, also_used_by)
-ALSO_USED = {}   # owning study -> function(row) -> borrowing study or ""
+ALSO_USED = {    # owning study -> function(row) -> borrowing study or ""
+    "Zeng2021": lambda r: "Zeng2024" if r["run_accession"] in set(ZENG_WT_DUP.values()) else "",
+}
 
 if __name__ == "__main__":
     main()

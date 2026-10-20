@@ -72,6 +72,7 @@ D = [
     ("Yu2024", "PRJNA666026", "resolved", S, "paper_statement", "Data availability: 'No new data were created' (PMC web page); B144/Q319 project", "Reuses Yu2021's libraries."),
     ("Zeng2021", "SRP327817", "resolved", P, "harvested", "PMC full-text scan", "8 runs (ZmRR1-dependent cold responses)."),
     ("Zeng2021", "PRJNA344653", "resolved", X, "harvested", "Cited in the text", "Zhang2017's dataset, cited for comparison; not Zeng2021's data."),
+    ("Zhang2017", "PRJNA343268", "resolved", PT, "paper_statement", "Cited in the paper (PMC web page) for the greenhouse 1-day cold vs control experiment", "Cold stress and control on panicoid grass species (University of Nebraska); keep the maize runs."),
     ("Zhang2017", "PRJNA344653", "resolved", PT, "repository_pubmed_link", "NCBI PubMed link", "108 runs: maize, sorghum and setaria; 36 Zea mays runs (cold time course)."),
     ("Zhang2020", "GSE146666", "resolved", P, "paper_statement", "GEO record links the PMID; Europe PMC annotation", "12 runs (BioProject PRJNA611589)."),
     ("Zhang2024", "PRJNA1050059", "resolved", P, "paper_statement", "Paper (PMC)", "12 runs; also cited by Dou2025."),
