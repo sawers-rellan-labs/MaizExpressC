@@ -7,7 +7,7 @@ reading the papers' data statements and the repository records; evidence in `evi
 Status: resolved / ambiguous / unavailable / not_found.
 Role: primary (the study's own data), shared (the study uses another study's data; libraries counted
 once), partial (only some runs are maize cold RNA-seq), duplicate, exclude (not the study's data),
-review (needs a decision from Rubén).
+review (needs a decision from Rubén), not_used (study left out of the analysis by Rubén).
 Usage (project root): python3 metadata/build/resolve_accessions.py
 """
 import csv
@@ -28,7 +28,7 @@ D = [
     ("Du2023", "", "not_found", "", "paper_statement", "Data availability statement: 'Not applicable' (PMC web page)", "No deposit stated; no repository match for Ye478 low-temperature germination."),
     ("Frey2020", "PRJNA556806", "resolved", P, "paper_statement", "Paper and Europe PMC annotation", "176 runs: 21 DH lines plus reference lines PE0075 and B104, cold vs control root tips."),
     ("Friero2023", "PRJNA877073", "ambiguous", R, "repository_match", "BioProject title 'Molecular signatures of temperature-dependent root meristem growth in maize' matches the paper's design; publisher page not readable (ScienceDirect)", "14 runs (DR_0-30, DR_12-20, DR_12-30 x 3 reps and more). Confirm from the paper's data statement."),
-    ("Gu2017", "PRJNA361019", "ambiguous", R, "harvested", "SRX2672484 found by the accession harvester; it belongs to PRJNA361019 (SRP102470)", "Only 1 run deposited (He344 cold leaf, HiSeq 4000) against the paper's 6 libraries: cannot form contrasts unless the rest is found."),
+    ("Gu2017", "PRJNA361019", "ambiguous", "not_used", "harvested", "SRX2672484 found by the accession harvester; it belongs to PRJNA361019 (SRP102470)", "Only 1 run deposited (He344 cold leaf, HiSeq 4000) against the paper's 6 libraries. Not used in this analysis (Rubén, 20 Oct 2026)."),
     ("He2016", "SRP093477", "resolved", P, "paper_statement", "Paper (PMC)", "5 runs; no biological replication."),
     ("He2023a", "CRA007319", "resolved", P, "repository_pubmed_link", "CNCB GSA record links PMID 36768951 (checked in a browser)", "CNCB GSA, BioProject PRJCA010234. 36 runs (72 files, 107 GB): B73 and introgression line IB030, control and cold time points."),
     ("Han2026", "CRA027029", "unavailable", P, "paper_statement", "Data availability statement on the Springer page: GSA CRA027029", "Not released in GSA (checked 20 Oct 2026). PRJNA1314463 (a repository match tried earlier) is not this study."),
@@ -39,7 +39,7 @@ D = [
     ("Li2020a", "PRJNA645274", "resolved", PT, "paper_statement", "Paper (PMC)", "42 runs: cold (4/10/16 °C vs 25 °C) and heat series; keep the cold series and controls."),
     ("Li2021", "PRJNA533857", "unavailable", P, "paper_statement", "Paper states PRJNA533857 (PMC)", "BioProject exists but has no released runs in SRA or ENA (checked 20 Oct 2026)."),
     ("Li2022a", "", "not_found", "", "paper_statement", "Data availability statement: 'No New data' (PMC web page)", "RNA-seq in the paper may reuse earlier data; source not identified."),
-    ("Li2022b", "PRJNA822071", "resolved", R, "harvested", "PMC full-text scan", "12 runs, Oxford Nanopore MinION full-length reads (single). Needs a decision: long reads, not the short-read salmon route."),
+    ("Li2022b", "PRJNA822071", "resolved", "not_used", "harvested", "PMC full-text scan", "12 runs, Oxford Nanopore MinION full-length reads (single). Not used in this analysis (Rubén, 20 Oct 2026)."),
     ("Li2022c", "PRJNA778546", "resolved", P, "paper_statement", "Paper (PMC web page)", "15 runs."),
     ("Li2022d", "PRJNA759333", "resolved", P, "harvested", "PMC full-text scan", "24 runs (two near-isogenic lines)."),
     ("Li2025", "GSE299259", "resolved", P, "harvested", "PMC full-text scan", "18 runs (zmzfp69 mutant vs WT)."),
@@ -122,7 +122,7 @@ def main():
     per_study = {}
     order = ["resolved", "ambiguous", "unavailable", "not_found"]
     for o in out:
-        if o["role"] in ("exclude",):
+        if o["role"] in ("exclude", "not_used"):
             continue
         s = per_study.get(o["study_id"])
         per_study[o["study_id"]] = o["status"] if s is None else min(s, o["status"], key=order.index)

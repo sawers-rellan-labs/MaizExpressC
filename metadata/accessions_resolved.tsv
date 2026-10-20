@@ -6,7 +6,7 @@ Dou2025	PRJNA1050059	BioProject	NCBI SRA		resolved	shared	paper_statement	12	Pap
 Du2023					not_found		paper_statement		Data availability statement: 'Not applicable' (PMC web page)	No deposit stated; no repository match for Ye478 low-temperature germination.
 Frey2020	PRJNA556806	BioProject	NCBI SRA		resolved	primary	paper_statement	176	Paper and Europe PMC annotation	176 runs: 21 DH lines plus reference lines PE0075 and B104, cold vs control root tips.
 Friero2023	PRJNA877073	BioProject	NCBI SRA		ambiguous	review	repository_match	14	BioProject title 'Molecular signatures of temperature-dependent root meristem growth in maize' matches the paper's design; publisher page not readable (ScienceDirect)	14 runs (DR_0-30, DR_12-20, DR_12-30 x 3 reps and more). Confirm from the paper's data statement.
-Gu2017	PRJNA361019	BioProject	NCBI SRA		ambiguous	review	harvested	1	SRX2672484 found by the accession harvester; it belongs to PRJNA361019 (SRP102470)	Only 1 run deposited (He344 cold leaf, HiSeq 4000) against the paper's 6 libraries: cannot form contrasts unless the rest is found.
+Gu2017	PRJNA361019	BioProject	NCBI SRA		ambiguous	not_used	harvested	1	SRX2672484 found by the accession harvester; it belongs to PRJNA361019 (SRP102470)	Only 1 run deposited (He344 cold leaf, HiSeq 4000) against the paper's 6 libraries. Not used in this analysis (Rubén, 20 Oct 2026).
 He2016	SRP093477	SRA study	NCBI SRA		resolved	primary	paper_statement	5	Paper (PMC)	5 runs; no biological replication.
 He2023a	CRA007319	GSA run set	CNCB GSA		resolved	primary	repository_pubmed_link	36	CNCB GSA record links PMID 36768951 (checked in a browser)	CNCB GSA, BioProject PRJCA010234. 36 runs (72 files, 107 GB): B73 and introgression line IB030, control and cold time points.
 Han2026	CRA027029	GSA run set	CNCB GSA		unavailable	primary	paper_statement		Data availability statement on the Springer page: GSA CRA027029	Not released in GSA (checked 20 Oct 2026). PRJNA1314463 (a repository match tried earlier) is not this study.
@@ -17,7 +17,7 @@ Li2017	SRP080208	SRA study	NCBI SRA		resolved	primary	paper_statement	12	Paper (
 Li2020a	PRJNA645274	BioProject	NCBI SRA		resolved	partial	paper_statement	42	Paper (PMC)	42 runs: cold (4/10/16 °C vs 25 °C) and heat series; keep the cold series and controls.
 Li2021	PRJNA533857	BioProject	NCBI SRA		unavailable	primary	paper_statement		Paper states PRJNA533857 (PMC)	BioProject exists but has no released runs in SRA or ENA (checked 20 Oct 2026).
 Li2022a					not_found		paper_statement		Data availability statement: 'No New data' (PMC web page)	RNA-seq in the paper may reuse earlier data; source not identified.
-Li2022b	PRJNA822071	BioProject	NCBI SRA		resolved	review	harvested	12	PMC full-text scan	12 runs, Oxford Nanopore MinION full-length reads (single). Needs a decision: long reads, not the short-read salmon route.
+Li2022b	PRJNA822071	BioProject	NCBI SRA		resolved	not_used	harvested	12	PMC full-text scan	12 runs, Oxford Nanopore MinION full-length reads (single). Not used in this analysis (Rubén, 20 Oct 2026).
 Li2022c	PRJNA778546	BioProject	NCBI SRA		resolved	primary	paper_statement	15	Paper (PMC web page)	15 runs.
 Li2022d	PRJNA759333	BioProject	NCBI SRA		resolved	primary	harvested	24	PMC full-text scan	24 runs (two near-isogenic lines).
 Li2025	GSE299259	GEO series	NCBI GEO		resolved	primary	harvested	18	PMC full-text scan	18 runs (zmzfp69 mutant vs WT).
