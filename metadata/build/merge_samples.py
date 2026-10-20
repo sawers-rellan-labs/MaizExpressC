@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# TEMPLATE from MaizExpressN (nitrogen): adapt the N-specific parts (vocabularies, classes, labels, per-study rules) to cold at M2.
 """Merge per-study sample sheets into metadata/samples.tsv and needs_review.tsv.
 
 Reads metadata/build/samples/<study_id>.tsv and <study_id>.review.tsv (format in
@@ -17,20 +16,21 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 SAMPLES = ROOT / "metadata" / "build" / "samples"
-COLS = ("sample_id study_id run_accessions genotype genotype_class background tissue_group "
-        "tissue_detail po_term stage stage_class age_days growth_system N_label_paper N_form "
-        "N_amount N_unit N_rank_in_study phase time_h other_factor other_factor_level replicate "
-        "pooled_plants include curation_note").split()
+COLS = ("sample_id study_id run_accessions genotype genotype_class background cold_tolerance tissue_group "
+        "tissue_detail po_term stage stage_class age_days growth_system temp_label_paper temperature_C "
+        "temperature_night_C control_temperature_C temp_rank_in_study phase time_h recovery_h light_condition "
+        "other_factor other_factor_level replicate pooled_plants include curation_note").split()
 REVIEW_COLS = ["study_id", "item", "question", "proposed_answer", "evidence"]
 VOCAB = {
-    "genotype_class": {"B73", "other inbred", "hybrid", "mutant", "transgenic", "NR"},
-    "tissue_group": {"Root", "Leaf", "Shoot", "Ear/kernel", "Whole seedling"},
-    "stage_class": {"seedling", "vegetative", "reproductive", "NR"},
-    "N_form": {"nitrate", "ammonium", "ammonium nitrate", "urea", "mixed", "none", "NR"},
-    "phase": {"steady", "starvation", "resupply"},
+    "genotype_class": {"B73", "other inbred", "hybrid", "mutant", "transgenic", "teosinte", "NR"},
+    "cold_tolerance": {"tolerant", "sensitive", "intermediate", "NR"},
+    "tissue_group": {"Root", "Leaf", "Shoot", "Whole seedling", "Seed/germination", "Reproductive"},
+    "stage_class": {"seed/germination", "seedling", "vegetative", "reproductive", "NR"},
+    "phase": {"control", "cold", "recovery", "chronic"},
     "include": {"TRUE", "FALSE"},
 }
-NUMERIC = {"N_amount": True, "time_h": True, "age_days": True, "pooled_plants": True}
+NUMERIC = {"temperature_C": True, "temperature_night_C": True, "control_temperature_C": True, "time_h": True,
+           "recovery_h": True, "age_days": True, "pooled_plants": True}
 
 
 def is_num(x):
@@ -72,14 +72,19 @@ def main(write=False):
             for col in NUMERIC:
                 if r[col] and r[col] != "NR" and not is_num(r[col]):
                     problems.append(f"{study} {r['sample_id']}: {col} = {r[col]!r} not numeric")
-            if r["N_rank_in_study"] != "NR" and not r["N_rank_in_study"].isdigit():
-                problems.append(f"{study} {r['sample_id']}: N_rank_in_study = {r['N_rank_in_study']!r}")
+            if r["temp_rank_in_study"] != "NR" and not r["temp_rank_in_study"].isdigit():
+                problems.append(f"{study} {r['sample_id']}: temp_rank_in_study = {r['temp_rank_in_study']!r}")
             if not r["replicate"].isdigit():
                 problems.append(f"{study} {r['sample_id']}: replicate = {r['replicate']!r}")
-            if r["N_unit"] not in ("mM N", "kg N/ha") and r["N_amount"] not in ("", "NR"):
-                problems.append(f"{study} {r['sample_id']}: N_unit = {r['N_unit']!r} (expect 'mM N' or 'kg N/ha')")
-            if r["phase"] in ("starvation", "resupply") and r["time_h"] == "":
+            if r["temperature_C"] in ("", "NR"):
+                problems.append(f"{study} {r['sample_id']}: temperature_C missing")
+            if r["phase"] in ("cold", "recovery") and r["time_h"] == "":
                 problems.append(f"{study} {r['sample_id']}: {r['phase']} without time_h")
+            if r["phase"] == "recovery" and r["recovery_h"] == "":
+                problems.append(f"{study} {r['sample_id']}: recovery without recovery_h")
+            if r["phase"] == "control" and is_num(r["temperature_C"]) and is_num(r["control_temperature_C"]) \
+                    and float(r["temperature_C"]) != float(r["control_temperature_C"]):
+                problems.append(f"{study} {r['sample_id']}: control sample at {r['temperature_C']} °C, control_temperature_C {r['control_temperature_C']}")
             for run in filter(None, r["run_accessions"].split(";")):
                 got[run] += 1
                 owner = run_study.get(run)

@@ -11,6 +11,7 @@ review (needs a decision from Rubén), not_used (study left out of the analysis 
 Usage (project root): python3 metadata/build/resolve_accessions.py
 """
 import csv
+import re
 from collections import Counter
 from pathlib import Path
 
@@ -119,7 +120,9 @@ def main():
         if acc == "CRA007319":
             n = "36"   # CNCB GSA page (72 files, paired), checked in a browser
         out.append({"study_id": sid, "accession": acc, "accession_type": r.get("type", ""), "repository": rep,
-                    "linked_ids": r.get("linked", ""), "status": st, "role": role, "evidence_type": et,
+                    "linked_ids": "; ".join(x for x in dict.fromkeys(
+                        re.findall(r"(?:PRJ[A-Z]+|SRP|ERP|GSE)\d+", " ".join((r.get("linked", ""), r.get("bioproject", ""), r.get("sra_link", "")))))
+                        if x != acc), "status": st, "role": role, "evidence_type": et,
                     "n_maize_rnaseq_runs": n, "evidence": ev, "notes": notes})
     with open(META / "accessions_resolved.tsv", "w", newline="") as f:
         w = csv.DictWriter(f, cols, delimiter="\t")

@@ -82,9 +82,14 @@ def read_length(r):
 # Each rule gets the assembled row (with 'alias', 'title', 'attrs') and returns
 # None to keep it, or an exclusion reason. Generic checks run first.
 RNA_STRATEGIES = {"RNA-Seq"}
+BLANK_ORGANISM_OK = {"Sommer2025"}
 
 
 def generic(row):
+    if row["organism"] in ("", "NA") and row["study_id"] in BLANK_ORGANISM_OK:
+        row["organism"] = "Zea mays"   # ENA leaves the organism blank for this maize-only project
+    if row["organism"].startswith("Zea mays subsp.") or row["organism"].startswith("Zea "):
+        return None if row["library_strategy"] in RNA_STRATEGIES else f"not RNA-seq ({row['library_strategy']})"
     if row["organism"] != "Zea mays":
         return f"non-maize ({row['organism']})"
     if row["library_strategy"] not in RNA_STRATEGIES and row["study_id"] != "Ma2021a":
@@ -125,21 +130,48 @@ def ena_library_names(acc):
             for r in csv.DictReader(h.fetch(url, "ebi").splitlines(), delimiter="\t")}
 
 
-# Per-study run rules go here, one function per study, each returning an exclusion
-# reason or None (examples in MaizExpressN: duplicate uploads, deferred data types,
-# runs from treatments outside the project's scope):
-#
-# @rule("Study2024")
-# def _(r):
-#     if "heat" in r["sample_title"]:
-#         return "heat treatment, no cold contrast"
+# Per-study run rules: one function per study, returning an exclusion reason or None.
+# Runs of other stresses in multi-stress projects are left out; their controls stay.
+
+@rule("Makarevitch2015")
+def _(r):
+    m = re.search(r"_(heat|salt|UV)\b", r["alias"])
+    if m:
+        return f"{m.group(1)} treatment, no cold contrast"
+
+
+@rule("Li2020a")
+def _(r):
+    if "high temperature" in r["attrs"].get("tissue", "") + r["attrs"].get("treatment", "") + r["sample_title"]:
+        return "heat treatment, no cold contrast"
+
+
+@rule("Zhou2022")
+def _(r):
+    if "_Heat_" in json.dumps(r["attrs"]):
+        return "heat treatment, no cold contrast"
+
+
+@rule("Liu2026")
+def _(r):
+    if re.match(r"HT\d", r["alias"]):
+        return "heat treatment, no cold contrast"
+    if re.match(r"(SD|MD)-", r["alias"]):
+        return "drought treatment, no cold contrast"
+
+
+@rule("Jia2020")
+def _(r):
+    if r["attrs"].get("tissue", "").lower() == "endosperm":
+        return "endosperm at 20 DAP, no cold treatment"
 
 
 # ---------------------------------------------------------------- build
 def main(dump=False):
     datasets = [d for d in csv.DictReader(open(ROOT / "metadata" / "accessions_resolved.tsv"),
                                           delimiter="\t")
-                if d["status"] == "resolved" and d["role"] in ("primary", "shared", "partial")]
+                if (d["status"] == "resolved" and d["role"] in ("primary", "shared", "partial"))
+                or (d["status"] == "ambiguous" and d["role"] == "review" and d["study_id"] in REVIEW_INCLUDED)]
     by_acc = {}
     for d in datasets:
         by_acc.setdefault(d["accession"], []).append(d)
@@ -160,8 +192,8 @@ def main(dump=False):
                 files = sorted(md5.get(g["run_accession"], []))
                 rows.append({
                     "run_accession": g["run_accession"], "study_id": owner, "also_used_by": others,
-                    "bioproject": re.search(r"PRJCA\d+", ds[0]["linked_ids"]).group(0),
-                    "biosample": g["sample_accession"], "experiment": "",
+                    "bioproject": GSA_PROJECT.get(acc, ""),
+                    "biosample": g.get("sample_accession", ""), "experiment": g.get("experiment", ""),
                     "sample_title": g["sample_title"], "organism": "Zea mays",
                     "library_strategy": "RNA-Seq", "library_source": "TRANSCRIPTOMIC",
                     "library_layout": g["layout"], "read_length": "", "instrument": g["instrument"],
@@ -246,7 +278,12 @@ MATES = {}       # study -> function pairing R1/R2 uploaded as separate runs (se
 NOT_USED = {s: "not used in this analysis" for s in ("Li2022b", "Gu2017")}
 
 # Datasets claimed by two studies: who owns the runs.
-OWNER = {}       # accession -> owning study_id
+OWNER = {"PRJNA1050059": "Zhang2024",     # Dou2025 reuses Zhang2024's libraries
+         "PRJNA244661": "Makarevitch2015",  # Waters2017 adds genotypes to the same BioProject
+         "PRJNA666026": "Yu2021"}           # Yu2023 and Yu2024 reuse Yu2021's libraries
+# ambiguous repository matches whose runs are curated anyway (ownership confirmed or refuted at M2)
+REVIEW_INCLUDED = {"Friero2023", "Liao2026"}
+GSA_PROJECT = {"CRA007319": "PRJCA010234"}   # CNCB run set -> BioProject (GSA page)
 SPLIT = {}       # accession -> function(row) -> (owner, also_used_by)
 ALSO_USED = {}   # owning study -> function(row) -> borrowing study or ""
 

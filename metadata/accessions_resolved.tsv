@@ -21,9 +21,9 @@ Li2022a					not_found		paper_statement		Data availability statement: 'No New dat
 Li2022b	PRJNA822071	BioProject	NCBI SRA		resolved	not_used	harvested	12	PMC full-text scan	12 runs, Oxford Nanopore MinION full-length reads (single). Not used in this analysis (Rubén, 20 Oct 2026).
 Li2022c	PRJNA778546	BioProject	NCBI SRA		resolved	primary	paper_statement	15	Paper (PMC web page)	15 runs.
 Li2022d	PRJNA759333	BioProject	NCBI SRA		resolved	primary	harvested	24	PMC full-text scan	24 runs (two near-isogenic lines).
-Li2025	GSE299259	GEO series	NCBI GEO		resolved	primary	harvested	18	PMC full-text scan	18 runs (zmzfp69 mutant vs WT).
+Li2025	GSE299259	GEO series	NCBI GEO	PRJNA1273176	resolved	primary	harvested	18	PMC full-text scan	18 runs (zmzfp69 mutant vs WT).
 Liu2026	PRJNA1393347	BioProject	NCBI SRA		resolved	primary	harvested	84	PMC full-text scan	84 runs, matching the paper's 84 libraries (cold, heat, drought).
-Lu2017	GSE76939	GEO series	NCBI GEO		resolved	primary	paper_statement	6	Paper (PMC) and NCBI PubMed link	Teosinte (Zea mays subsp. mexicana), 6 runs; BioProject PRJNA309111, SRP068562.
+Lu2017	GSE76939	GEO series	NCBI GEO	PRJNA309111; SRP068562	resolved	primary	paper_statement	6	Paper (PMC) and NCBI PubMed link	Teosinte (Zea mays subsp. mexicana), 6 runs; BioProject PRJNA309111, SRP068562.
 Lu2017	PRJNA866469	BioProject	NCBI SRA		resolved	exclude	agent		Listed by the screening agent	Zea luxurians genome project; not this study's RNA-seq.
 Makarevitch2015	PRJNA244661	BioProject	NCBI SRA		resolved	primary	paper_statement	33	Data availability statement (PMC)	33 runs (cold, heat, salt, UV; B73, Mo17, Oh43 and later B37/PH207 runs used by Waters2017). Corrected S1 table (erratum PMC4599801) maps runs to samples.
 Meng2022a	PRJNA795360	BioProject	NCBI SRA		resolved	primary	paper_statement	12	Paper (PMC)	12 runs.
@@ -41,8 +41,8 @@ Tang2026	CRA041107	GSA run set	CNCB GSA		unavailable	primary	harvested		PMC full
 Wang2023	PRJNA767196	BioProject	NCBI SRA		resolved	partial	paper_statement	12	Data descriptor (Scientific Data); NCBI SRA	132 runs from 11 species; 12 Zea mays runs (4 °C at 0/2/24/168 h x 3).
 Waters2017	PRJNA244661	BioProject	NCBI SRA		resolved	shared	paper_statement	33	Accession numbers section (Wiley page): PRJNA244661	Same BioProject as Makarevitch2015; Waters2017 adds genotypes (B37, PH207). Runs are curated once under Makarevitch2015 with also_used_by.
 Waters2017	PRJNA385873	BioProject	NCBI SRA		ambiguous	review	repository_match	54	University of Minnesota project with inbred x hybrid cold runs; not cited in the paper	54 runs (e.g. Oh43xB73, B73xPH207 cold reps). May belong to a later paper; listed for triage.
-Xue2021	GSE167156	GEO series	NCBI GEO		resolved	primary	repository_pubmed_link	16	GEO record links PMID 34240135	16 runs: four lines, chilling (BioProject PRJNA703398).
-Xue2021	GSE167881	GEO series	NCBI GEO		resolved	primary	repository_pubmed_link	48	GEO record links PMID 34240135	48 runs: tissue-level local vs distal chilling (BioProject PRJNA705456).
+Xue2021	GSE167156	GEO series	NCBI GEO	PRJNA703398; SRP307250	resolved	primary	repository_pubmed_link	16	GEO record links PMID 34240135	16 runs: four lines, chilling (BioProject PRJNA703398).
+Xue2021	GSE167881	GEO series	NCBI GEO	PRJNA705456; SRP308554	resolved	primary	repository_pubmed_link	48	GEO record links PMID 34240135	48 runs: tissue-level local vs distal chilling (BioProject PRJNA705456).
 Yang2025	PRJNA1111354	BioProject	NCBI SRA		resolved	primary	harvested	15	PMC full-text scan	15 runs (ABA/BR x cold).
 Yu2021	PRJNA666026	BioProject	NCBI SRA		resolved	primary	repository_match	18	B144/Q319 BioProject registered Sep 2020; 18 runs fit Yu2021's design (2 lines x 0/12/24 h x 3); Yu2023 cites it	Owner of the B144/Q319 libraries; Yu2023 and Yu2024 reuse them.
 Yu2023	PRJNA666026	BioProject	NCBI SRA		resolved	shared	paper_statement	18	PMC full-text scan and Europe PMC annotation	Reuses Yu2021's libraries.
@@ -50,7 +50,7 @@ Yu2024	PRJNA666026	BioProject	NCBI SRA		resolved	shared	paper_statement	18	Data 
 Zeng2021	SRP327817	SRA study	NCBI SRA		resolved	primary	harvested	8	PMC full-text scan	8 runs (ZmRR1-dependent cold responses).
 Zeng2021	PRJNA344653	BioProject	NCBI SRA		resolved	exclude	harvested	36	Cited in the text	Zhang2017's dataset, cited for comparison; not Zeng2021's data.
 Zhang2017	PRJNA344653	BioProject	NCBI SRA		resolved	partial	repository_pubmed_link	36	NCBI PubMed link	108 runs: maize, sorghum and setaria; 36 Zea mays runs (cold time course).
-Zhang2020	GSE146666	GEO series	NCBI GEO		resolved	primary	paper_statement	12	GEO record links the PMID; Europe PMC annotation	12 runs (BioProject PRJNA611589).
+Zhang2020	GSE146666	GEO series	NCBI GEO	PRJNA611589; SRP252094	resolved	primary	paper_statement	12	GEO record links the PMID; Europe PMC annotation	12 runs (BioProject PRJNA611589).
 Zhang2024	PRJNA1050059	BioProject	NCBI SRA		resolved	primary	paper_statement	12	Paper (PMC)	12 runs; also cited by Dou2025.
 Zhao2021	PRJNA686250	BioProject	NCBI SRA		resolved	primary	paper_statement	6	Data availability statement lists SRR13312968-72 (PMC web page); the runs belong to PRJNA686250	6 runs (He344 roots, cold vs control).
 Zhao2024a	PRJNA1096968	BioProject	NCBI SRA		unavailable	primary	paper_statement		Paper (PMC)	Not public in NCBI (checked 20 Oct 2026).
