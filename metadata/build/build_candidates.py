@@ -36,6 +36,7 @@ EXTRA = {
     "Han2026": [("CRA027029", "data availability statement on the Springer page")],
     "Zhou2024": [("PRJNA852372", "accession numbers section on the OUP page")],
     "Gu2017": [("PRJNA361019", "BioProject of SRX2672484 (found by the harvester)")],
+    "Jia2020": [("PRJNA598312", "University of Nebraska RDM4 project; leaf RNA-seq at 28, 10 and 2 °C (SRA titles), matching the paper's design")],
     "Yu2024": [("PRJNA666026", "repository match: B144/Q319 project; the paper says no new data were created")],
 }
 
