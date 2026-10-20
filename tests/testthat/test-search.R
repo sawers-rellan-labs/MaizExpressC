@@ -24,7 +24,9 @@ test_that("an identifier that maps to several genes returns all of them", {
 })
 
 test_that("every quantified gene is in the annotation", {
+  tables <- Sys.glob(file.path(ROOT, "results", "*", "salmon.merged.gene_counts.tsv"))
+  skip_if(length(tables) == 0, "no gene tables yet")
   g <- pq("annotation", "genes.parquet")
-  counts <- fread(Sys.glob(file.path(ROOT, "results", "*", "salmon.merged.gene_counts.tsv"))[1], select = "gene_id")
+  counts <- fread(tables[1], select = "gene_id")
   expect_true(all(counts$gene_id %in% g$gene_id))
 })
