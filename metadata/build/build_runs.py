@@ -317,7 +317,7 @@ OWNER = {"PRJNA1050059": "Zhang2024",     # Dou2025 reuses Zhang2024's libraries
          "PRJNA244661": "Makarevitch2015",  # Waters2017 adds genotypes to the same BioProject
          "PRJNA666026": "Yu2021"}           # Yu2023 and Yu2024 reuse Yu2021's libraries
 # ambiguous repository matches whose runs are curated anyway (ownership confirmed or refuted at M2)
-REVIEW_INCLUDED = {"Friero2023", "Liao2026"}
+REVIEW_INCLUDED = set()   # (Friero2023 and Liao2026 were accepted and are now resolved)
 GSA_PROJECT = {"CRA007319": "PRJCA010234"}   # CNCB run set -> BioProject (GSA page)
 SPLIT = {}       # accession -> function(row) -> (owner, also_used_by)
 ALSO_USED = {    # owning study -> function(row) -> borrowing study or ""

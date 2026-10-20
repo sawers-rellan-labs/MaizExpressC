@@ -27,7 +27,7 @@ suppressPackageStartupMessages({
 stopifnot(requireNamespace("ashr", quietly = TRUE))  # used by lfcShrink(type = "ashr")
 options(warn = 1)
 
-NO_LENGTH <- character()       # 3' tag-seq: no length offsets
+NO_LENGTH <- c("Xue2021")       # 3' tag-seq (QuantSeq): no length offsets
 PADJ_DEG <- 0.05; LFC_DEG <- 1      # DEG call for the summary table only
 MIN_COUNT <- 10                    # a gene is tested if >= MIN_COUNT reads in >= MIN_SAMPLES samples
 GROUP_KEY <- c("study_id", "genotype", "tissue_group", "tissue_detail", "N_label_paper",

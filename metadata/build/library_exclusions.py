@@ -28,7 +28,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 MIN_MAPPED = 5_000_000
 MIN_MAPPED_TAG = 2_000_000
-TAG_STUDIES = set()           # 3' tag-seq: fewer reads needed; replicate rule not applied
+TAG_STUDIES = {"Xue2021"}     # 3' tag-seq (QuantSeq): fewer reads needed; replicate rule not applied
+# per-study mapped-read floor agreed with Rubén (20 Oct 2026): Crow2020 is shallow (median 3.9 M pairs)
+MIN_MAPPED_STUDY = {"Crow2020": 2_000_000}
 MIN_PCT = 60.0
 MAX_BELOW_MEDIAN = 10.0
 R_MARGIN_3 = 0.03
@@ -55,7 +57,7 @@ for study, rs in by_study.items():
         by_tissue[tg(r["sample_id"])].append(float(r["percent_mapped"]))
     for r in rs:
         sid, pct, mapped = r["sample_id"], float(r["percent_mapped"]), int(r["reads_mapped"])
-        floor = MIN_MAPPED_TAG if study in TAG_STUDIES else MIN_MAPPED
+        floor = MIN_MAPPED_STUDY.get(study, MIN_MAPPED_TAG if study in TAG_STUDIES else MIN_MAPPED)
         if mapped < floor:
             reasons[sid].append(f"{mapped / 1e6:.1f} M mapped reads (< {floor / 1e6:.0f} M)")
         med = statistics.median(by_tissue[tg(sid)])

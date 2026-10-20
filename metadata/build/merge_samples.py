@@ -126,10 +126,18 @@ def main(write=False):
             w.writerows(merged)
         extra = list(csv.DictReader(open(ROOT / "metadata" / "build" / "review_global.tsv"),
                                     delimiter="\t"))
-        with open(ROOT / "metadata" / "needs_review.tsv", "w", newline="") as f:
-            w = csv.DictWriter(f, fieldnames=REVIEW_COLS, delimiter="\t")
+        # keep decisions already recorded (column `decision`, matched on study_id + item)
+        nr = ROOT / "metadata" / "needs_review.tsv"
+        decided = {}
+        if nr.exists():
+            for x in csv.DictReader(open(nr), delimiter="\t"):
+                if x.get("decision"):
+                    decided[(x["study_id"], x["item"])] = x["decision"]
+        out = [{**x, "decision": decided.get((x["study_id"], x["item"]), "")} for x in extra + reviews]
+        with open(nr, "w", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=REVIEW_COLS + ["decision"], delimiter="\t", extrasaction="ignore")
             w.writeheader()
-            w.writerows(extra + reviews)
+            w.writerows(out)
         print("wrote metadata/samples.tsv and metadata/needs_review.tsv")
     return problems
 
