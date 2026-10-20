@@ -1,0 +1,15 @@
+sample,fastq_1,fastq_2,strandedness
+Friero2023_20C_6h_R2,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494916_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494916_2.fastq.gz,auto
+Friero2023_20C_6h_R1,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494917_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494917_2.fastq.gz,auto
+Friero2023_30C_12h_R3,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494918_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494918_2.fastq.gz,auto
+Friero2023_30C_12h_R2,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494919_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494919_2.fastq.gz,auto
+Friero2023_30C_12h_R1,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494920_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494920_2.fastq.gz,auto
+Friero2023_30C_6h_R2,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494921_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494921_2.fastq.gz,auto
+Friero2023_30C_6h_R1,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494922_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494922_2.fastq.gz,auto
+Friero2023_30C_0h_R3,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494923_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494923_2.fastq.gz,auto
+Friero2023_20C_12h_R3,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494924_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494924_2.fastq.gz,auto
+Friero2023_20C_12h_R2,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494925_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494925_2.fastq.gz,auto
+Friero2023_20C_12h_R1,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494926_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494926_2.fastq.gz,auto
+Friero2023_20C_6h_R3,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494927_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494927_2.fastq.gz,auto
+Friero2023_30C_0h_R2,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494928_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494928_2.fastq.gz,auto
+Friero2023_30C_0h_R1,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494929_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Friero2023/SRR21494929_2.fastq.gz,auto

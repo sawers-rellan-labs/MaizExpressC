@@ -1,0 +1,16 @@
+sample,fastq_1,fastq_2,strandedness
+Li2022c_bzip68-1_25C_0h_R1,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844559_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844559_2.fastq.gz,auto
+Li2022c_WT_4C_12h_R3,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844560_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844560_2.fastq.gz,auto
+Li2022c_WT_4C_12h_R2,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844561_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844561_2.fastq.gz,auto
+Li2022c_WT_4C_12h_R1,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844562_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844562_2.fastq.gz,auto
+Li2022c_WT_25C_12h_R3,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844563_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844563_2.fastq.gz,auto
+Li2022c_WT_25C_12h_R2,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844564_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844564_2.fastq.gz,auto
+Li2022c_WT_25C_12h_R1,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844565_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844565_2.fastq.gz,auto
+Li2022c_WT_25C_0h_R3,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844566_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844566_2.fastq.gz,auto
+Li2022c_bzip68-1_4C_12h_R3,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844567_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844567_2.fastq.gz,auto
+Li2022c_bzip68-1_4C_12h_R2,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844568_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844568_2.fastq.gz,auto
+Li2022c_bzip68-1_4C_12h_R1,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844569_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844569_2.fastq.gz,auto
+Li2022c_bzip68-1_25C_0h_R3,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844570_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844570_2.fastq.gz,auto
+Li2022c_bzip68-1_25C_0h_R2,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844571_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844571_2.fastq.gz,auto
+Li2022c_WT_25C_0h_R2,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844572_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844572_2.fastq.gz,auto
+Li2022c_WT_25C_0h_R1,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844573_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Li2022c/SRR16844573_2.fastq.gz,auto

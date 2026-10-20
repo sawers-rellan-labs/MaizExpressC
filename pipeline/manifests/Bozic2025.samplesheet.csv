@@ -1,0 +1,9 @@
+sample,fastq_1,fastq_2,strandedness
+Bozic2025_Ls_C_6h,/share/maize/rrellan/MaizeExpressC/fastq/Bozic2025/ERR13667093_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Bozic2025/ERR13667093_2.fastq.gz,auto
+Bozic2025_Ls_C_24h,/share/maize/rrellan/MaizeExpressC/fastq/Bozic2025/ERR13667094_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Bozic2025/ERR13667094_2.fastq.gz,auto
+Bozic2025_Ls_T_6h,/share/maize/rrellan/MaizeExpressC/fastq/Bozic2025/ERR13667095_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Bozic2025/ERR13667095_2.fastq.gz,auto
+Bozic2025_Ls_T_24h,/share/maize/rrellan/MaizeExpressC/fastq/Bozic2025/ERR13667096_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Bozic2025/ERR13667096_2.fastq.gz,auto
+Bozic2025_Lt_C_6h,/share/maize/rrellan/MaizeExpressC/fastq/Bozic2025/ERR13667097_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Bozic2025/ERR13667097_2.fastq.gz,auto
+Bozic2025_Lt_C_24h,/share/maize/rrellan/MaizeExpressC/fastq/Bozic2025/ERR13667098_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Bozic2025/ERR13667098_2.fastq.gz,auto
+Bozic2025_Lt_T_6h,/share/maize/rrellan/MaizeExpressC/fastq/Bozic2025/ERR13667099_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Bozic2025/ERR13667099_2.fastq.gz,auto
+Bozic2025_Lt_T_24h,/share/maize/rrellan/MaizeExpressC/fastq/Bozic2025/ERR13667100_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Bozic2025/ERR13667100_2.fastq.gz,auto

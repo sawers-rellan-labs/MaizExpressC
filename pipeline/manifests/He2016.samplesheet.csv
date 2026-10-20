@@ -1,0 +1,6 @@
+sample,fastq_1,fastq_2,strandedness
+He2016_LT2,/share/maize/rrellan/MaizeExpressC/fastq/He2016/SRR5028662.fastq.gz,,auto
+He2016_CK2,/share/maize/rrellan/MaizeExpressC/fastq/He2016/SRR5028663.fastq.gz,,auto
+He2016_CK0,/share/maize/rrellan/MaizeExpressC/fastq/He2016/SRR5028664.fastq.gz,,auto
+He2016_LT3,/share/maize/rrellan/MaizeExpressC/fastq/He2016/SRR5028665.fastq.gz,,auto
+He2016_CK3,/share/maize/rrellan/MaizeExpressC/fastq/He2016/SRR5028666.fastq.gz,,auto

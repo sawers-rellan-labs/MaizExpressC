@@ -1,0 +1,13 @@
+sample,fastq_1,fastq_2,strandedness
+Wang2023_168h_R3,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17200345_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17200345_2.fastq.gz,auto
+Wang2023_168h_R2,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17200346_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17200346_2.fastq.gz,auto
+Wang2023_168h_R1,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17200347_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17200347_2.fastq.gz,auto
+Wang2023_24h_R3,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17200349_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17200349_2.fastq.gz,auto
+Wang2023_24h_R2,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17200350_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17200350_2.fastq.gz,auto
+Wang2023_24h_R1,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17200351_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17200351_2.fastq.gz,auto
+Wang2023_2h_R3,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17200352_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17200352_2.fastq.gz,auto
+Wang2023_2h_R2,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17200353_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17200353_2.fastq.gz,auto
+Wang2023_2h_R1,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17200354_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17200354_2.fastq.gz,auto
+Wang2023_0h_R3,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17234922_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17234922_2.fastq.gz,auto
+Wang2023_0h_R2,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17234924_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17234924_2.fastq.gz,auto
+Wang2023_0h_R1,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17234925_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Wang2023/SRR17234925_2.fastq.gz,auto

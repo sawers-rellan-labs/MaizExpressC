@@ -1,0 +1,6 @@
+run	url	md5	dest
+SRR5028662	https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR502/002/SRR5028662/SRR5028662.fastq.gz	8fa8b02f65f20542d188ada8a605363e	/share/maize/rrellan/MaizeExpressC/fastq/He2016/SRR5028662.fastq.gz
+SRR5028663	https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR502/003/SRR5028663/SRR5028663.fastq.gz	b59f52b06a3552b9291bcea4816be4bd	/share/maize/rrellan/MaizeExpressC/fastq/He2016/SRR5028663.fastq.gz
+SRR5028664	https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR502/004/SRR5028664/SRR5028664.fastq.gz	36da87b6f8e085605f6c2d4e72a6024f	/share/maize/rrellan/MaizeExpressC/fastq/He2016/SRR5028664.fastq.gz
+SRR5028665	https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR502/005/SRR5028665/SRR5028665.fastq.gz	8a8063ce86f7b1fa4334d4d85ce691cf	/share/maize/rrellan/MaizeExpressC/fastq/He2016/SRR5028665.fastq.gz
+SRR5028666	https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR502/006/SRR5028666/SRR5028666.fastq.gz	fdc00d6eb19f7fdb75e7bb43c57db11f	/share/maize/rrellan/MaizeExpressC/fastq/He2016/SRR5028666.fastq.gz

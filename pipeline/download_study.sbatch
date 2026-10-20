@@ -14,4 +14,8 @@
 set -uo pipefail
 STUDY="${1:?study_id}"
 PIPE=/rsstu/users/r/rrellan/sara/MaizeExpressC/pipeline
-bash "$PIPE/download_fastq.sh" "$PIPE/manifests/$STUDY.downloads.tsv" "${2:-6}"
+bash "$PIPE/download_fastq.sh" "$PIPE/manifests/$STUDY.downloads.tsv" "${2:-6}" || exit 1
+# single-file paired runs (R1 block then R2 block): split after the MD5-checked download
+if [[ -f "$PIPE/manifests/$STUDY.split.tsv" ]]; then
+  bash "$PIPE/split_halves.sh" "$PIPE/manifests/$STUDY.split.tsv"
+fi

@@ -1,0 +1,5 @@
+sample,fastq_1,fastq_2,strandedness
+Zeng2024_OE_4C12h_R2,/share/maize/rrellan/MaizeExpressC/fastq/Zeng2024/SRR27298831_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Zeng2024/SRR27298831_2.fastq.gz,auto
+Zeng2024_OE_4C12h_R1,/share/maize/rrellan/MaizeExpressC/fastq/Zeng2024/SRR27298832_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Zeng2024/SRR27298832_2.fastq.gz,auto
+Zeng2024_OE_25C_R2,/share/maize/rrellan/MaizeExpressC/fastq/Zeng2024/SRR27298833_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Zeng2024/SRR27298833_2.fastq.gz,auto
+Zeng2024_OE_25C_R1,/share/maize/rrellan/MaizeExpressC/fastq/Zeng2024/SRR27298834_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Zeng2024/SRR27298834_2.fastq.gz,auto

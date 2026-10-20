@@ -1,0 +1,13 @@
+sample,fastq_1,fastq_2,strandedness
+Zhang2024_ZD958_5C_R1,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155420_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155420_2.fastq.gz,auto
+Zhang2024_ZD958_15C_R3,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155421_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155421_2.fastq.gz,auto
+Zhang2024_ZD958_15C_R2,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155422_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155422_2.fastq.gz,auto
+Zhang2024_ZD958_15C_R1,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155423_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155423_2.fastq.gz,auto
+Zhang2024_DMY1_5C_R3,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155424_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155424_2.fastq.gz,auto
+Zhang2024_DMY1_5C_R2,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155425_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155425_2.fastq.gz,auto
+Zhang2024_DMY1_5C_R1,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155426_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155426_2.fastq.gz,auto
+Zhang2024_DMY1_15C_R3,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155427_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155427_2.fastq.gz,auto
+Zhang2024_ZD958_5C_R3,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155428_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155428_2.fastq.gz,auto
+Zhang2024_ZD958_5C_R2,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155429_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155429_2.fastq.gz,auto
+Zhang2024_DMY1_15C_R2,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155430_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155430_2.fastq.gz,auto
+Zhang2024_DMY1_15C_R1,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155431_1.fastq.gz,/share/maize/rrellan/MaizeExpressC/fastq/Zhang2024/SRR27155431_2.fastq.gz,auto
