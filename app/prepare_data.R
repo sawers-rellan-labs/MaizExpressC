@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 # M7: build the app's data folder from the project outputs.
 #   Rscript app/prepare_data.R            (from the project root; writes app/data/)
-#   MAIZEEXPRESSC_PUBLIC=1 Rscript app/prepare_data.R   public build without private (unpublished) studies
+#   MAIZEXPRESSC_PUBLIC=1 Rscript app/prepare_data.R   public build without private (unpublished) studies
 #
 # Small tables are written whole and loaded at start-up. Per-gene tables (DE results and TPM)
 # are split into ~440 files by gene-ID bucket (the 3 digits after "Zm00001eb"), so a gene lookup
@@ -42,10 +42,10 @@ write_parquet(ctl[, .(gene_id, symbol, group, role)], file.path(out, "cold_contr
 
 # catalogue, samples, QC
 cat_ <- fread("catalogue/maize_cold_rnaseq_studies.tsv", colClasses = "character", na.strings = NULL)
-# public build (MAIZEEXPRESSC_PUBLIC=1): leave out studies marked private = TRUE (unpublished lab data);
+# public build (MAIZEXPRESSC_PUBLIC=1): leave out studies marked private = TRUE (unpublished lab data);
 # run analysis/pool_meta.R with the same setting first so the pooled tables match
 PRIVATE <- if ("private" %in% names(cat_)) cat_[toupper(private) == "TRUE", study_id] else character()
-PUBLIC <- nzchar(Sys.getenv("MAIZEEXPRESSC_PUBLIC"))
+PUBLIC <- nzchar(Sys.getenv("MAIZEXPRESSC_PUBLIC"))
 drop <- if (PUBLIC) PRIVATE else character()
 if (length(drop)) message("public build: leaving out private studies ", paste(drop, collapse = ", "))
 smp <- fread("metadata/samples.tsv", colClasses = "character", na.strings = NULL)

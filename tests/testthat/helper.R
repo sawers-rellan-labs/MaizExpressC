@@ -1,4 +1,4 @@
-# Shared setup for the MaizeExpressC tests (run with Rscript tests/testthat.R from the project root).
+# Shared setup for the MaizExpressC tests (run with Rscript tests/testthat.R from the project root).
 suppressPackageStartupMessages({ library(data.table); library(arrow) })
 ROOT <- normalizePath(file.path(testthat::test_path(), "..", ".."))
 pq <- function(...) as.data.table(read_parquet(file.path(ROOT, ...)))

@@ -1,4 +1,4 @@
-# Plotly figures for the MaizeExpressC app.
+# Plotly figures for the MaizExpressC app.
 
 INK <- "#22303A"; MUTED <- "#6B7884"; GRID <- "#E6E9EC"
 FONT <- list(family = "IBM Plex Sans, system-ui, sans-serif", size = 12, color = INK)

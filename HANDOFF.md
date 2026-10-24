@@ -1,4 +1,4 @@
-# Handoff: MaizeExpressC
+# Handoff: MaizExpressC
 
 Plan for a cold-stress counterpart of MaizExpressN: look up a maize gene and see how its expression responds to low temperature across published RNA-seq studies, study by study and pooled across studies by tissue, contrast class, growth system, stage and genotype. Owner: Rubén Rellán-Álvarez (GEMMA Lab, NC State). Started 20 Oct 2026 from the MaizExpressN infrastructure (see `CLAUDE.md` for what was copied).
 

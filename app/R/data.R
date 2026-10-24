@@ -1,11 +1,11 @@
-# Data access for the MaizeExpressC app. Shiny sources app/R/*.R before app.R (alphabetically),
+# Data access for the MaizExpressC app. Shiny sources app/R/*.R before app.R (alphabetically),
 # so the packages these helpers need are loaded here.
 suppressPackageStartupMessages({ library(data.table); library(arrow); library(plotly) })
 
-# Data access for the MaizeExpressC app. The data folder is app/data by default; set
-# MAIZEEXPRESSC_DATA to point elsewhere (built by app/prepare_data.R).
+# Data access for the MaizExpressC app. The data folder is app/data by default; set
+# MAIZEXPRESSC_DATA to point elsewhere (built by app/prepare_data.R).
 
-DATA_DIR <- Sys.getenv("MAIZEEXPRESSC_DATA", "data")
+DATA_DIR <- Sys.getenv("MAIZEXPRESSC_DATA", "data")
 rp <- function(f) as.data.table(arrow::read_parquet(file.path(DATA_DIR, f)))
 
 GENES     <- rp("genes.parquet")

@@ -4,8 +4,8 @@
 app_env <- function() {
   skip_if_not(dir.exists(file.path(ROOT, "app", "data", "tpm")), "app data not built")
   e <- new.env()
-  old <- Sys.getenv("MAIZEEXPRESSC_DATA"); Sys.setenv(MAIZEEXPRESSC_DATA = file.path(ROOT, "app", "data"))
-  on.exit(Sys.setenv(MAIZEEXPRESSC_DATA = old))
+  old <- Sys.getenv("MAIZEXPRESSC_DATA"); Sys.setenv(MAIZEXPRESSC_DATA = file.path(ROOT, "app", "data"))
+  on.exit(Sys.setenv(MAIZEXPRESSC_DATA = old))
   for (f in c("data.R", "plots.R", "pool.R", "coexpr.R")) sys.source(file.path(ROOT, "app", "R", f), envir = e)
   e
 }

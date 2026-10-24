@@ -18,7 +18,7 @@
 #                                       chilling and freezing; germination and chronic designs stay apart
 #                                       from acute chilling, as decided at M2, and recovery is not cold)
 # Private lab data: a catalogue column private = TRUE would mark unpublished studies; with
-# MAIZEEXPRESSC_PUBLIC=1 they are left out of the pooled tables (use the same setting for
+# MAIZEXPRESSC_PUBLIC=1 they are left out of the pooled tables (use the same setting for
 # app/prepare_data.R). The cold catalogue has no private studies yet.
 # Columns: gene_id, tissue_group, contrast_class, filter_set, k_studies, k_contrasts, pooled_log2fc,
 #   se, ci_low, ci_high, pvalue, padj (BH within each grouping and filter set), tau2, i2,
@@ -30,10 +30,10 @@ PADJ <- 0.05; LFC <- 1
 COLD_CLASSES <- c("chilling", "freezing")
 
 cons <- fread("metadata/contrasts.tsv", colClasses = "character", na.strings = NULL)
-# public build (MAIZEEXPRESSC_PUBLIC=1): leave out studies marked private = TRUE in the catalogue
+# public build (MAIZEXPRESSC_PUBLIC=1): leave out studies marked private = TRUE in the catalogue
 cat_ <- fread("catalogue/maize_cold_rnaseq_studies.tsv", colClasses = "character", na.strings = NULL)
 PRIVATE <- if ("private" %in% names(cat_)) cat_[toupper(private) == "TRUE", study_id] else character()
-if (nzchar(Sys.getenv("MAIZEEXPRESSC_PUBLIC")) && length(PRIVATE)) {
+if (nzchar(Sys.getenv("MAIZEXPRESSC_PUBLIC")) && length(PRIVATE)) {
   cons <- cons[!(study_id %in% PRIVATE)]
   message("public build: leaving out private studies ", paste(PRIVATE, collapse = ", "))
 }

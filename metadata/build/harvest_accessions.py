@@ -53,7 +53,7 @@ def fetch(url, kind):
     dt = time.time() - _last_call[kind]
     if dt < wait:
         time.sleep(wait - dt)
-    req = urllib.request.Request(url, headers={"User-Agent": "MaizeExpressC-accessions/0.1"})
+    req = urllib.request.Request(url, headers={"User-Agent": "MaizExpressC-accessions/0.1"})
     text = None
     for attempt in range(4):
         try:
@@ -77,7 +77,7 @@ def fetch(url, kind):
 
 
 def eutil(name, **params):
-    params.setdefault("tool", "MaizeExpressC")
+    params.setdefault("tool", "MaizExpressC")
     return fetch(EUTILS + name + ".fcgi?" + urllib.parse.urlencode(params), "ncbi")
 
 

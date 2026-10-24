@@ -1,4 +1,4 @@
-# MaizeExpressC
+# MaizExpressC
 
 Look up a maize gene and see how its expression responds to cold (chilling, freezing, cold during
 germination, growth in a cool environment and recovery) across published RNA-seq studies, study by study and
@@ -26,7 +26,7 @@ Rscript -e 'shiny::runApp("app", launch.browser = TRUE)'
 ```
 
 Run from the project root (the renv library activates there). The app reads `app/data/`, built by
-`app/prepare_data.R` and `app/prepare_partners.R`; set `MAIZEEXPRESSC_DATA` to use a data folder elsewhere.
+`app/prepare_data.R` and `app/prepare_partners.R`; set `MAIZEXPRESSC_DATA` to use a data folder elsewhere.
 
 ## Deploy to Posit Connect Cloud (not deployed yet)
 
@@ -34,14 +34,14 @@ Same route as MaizExpressN (account `gemmalab`). From an R session started in th
 
 ```r
 rsconnect::connectCloudUser()                                   # once per computer: authorise in the browser
-rsconnect::deployApp(appDir = "app", appName = "maizeexpressc")  # upload app/ (about 720 MB) and publish
+rsconnect::deployApp(appDir = "app", appName = "maizexpressc")  # upload app/ (about 720 MB) and publish
 ```
 
 The upload is about 716 MB (`app/data` 721 MB: DE 383, TPM 206, partner lists 66, atlas 16), under the
 1 GiB bundle limit of Connect Cloud's free plan; publishing from GitHub has no bundle limit. For that route,
 refresh `app/manifest.json` with `rsconnect::writeManifest(appDir = "app")` and commit it with the `app/` folder.
 Re-run `deployApp()` after `Rscript app/prepare_data.R` and `Rscript app/prepare_partners.R` to update the app.
-Do a public build (`MAIZEEXPRESSC_PUBLIC=1`) if any study is marked private.
+Do a public build (`MAIZEXPRESSC_PUBLIC=1`) if any study is marked private.
 
 ## Layout
 
@@ -79,7 +79,7 @@ Rscript tests/testthat.R
 
 1. **Catalogue.** Add a row to `catalogue/maize_cold_rnaseq_studies.tsv` with a new `study_id`
    (FirstAuthorYear). For unpublished lab data add a column `private` and set it to `TRUE`, then build the
-   pooled tables and the app data with `MAIZEEXPRESSC_PUBLIC=1` for a public deployment.
+   pooled tables and the app data with `MAIZEXPRESSC_PUBLIC=1` for a public deployment.
 2. **Accessions and runs.** Record the accession in `metadata/build/resolve_accessions.py` (→
    `metadata/accessions_resolved.tsv`), then run `build_runs.py`; run-level exclusions go in its rules with a reason.
 3. **Samples.** Write `metadata/build/samples/<study_id>.tsv` (and a `.review.tsv`) following

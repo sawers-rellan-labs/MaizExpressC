@@ -1,6 +1,6 @@
-# MaizeExpressC: maize gene expression across cold-stress RNA-seq studies.
+# MaizExpressC: maize gene expression across cold-stress RNA-seq studies.
 #   shiny::runApp("app")        (from the project root; data in app/data, built by app/prepare_data.R)
-# Set MAIZEEXPRESSC_DATA to use a data folder elsewhere.
+# Set MAIZEXPRESSC_DATA to use a data folder elsewhere.
 
 suppressPackageStartupMessages({
   library(shiny); library(bslib); library(plotly); library(DT); library(data.table); library(arrow)
@@ -143,7 +143,7 @@ studies_page <- nav_panel(
 methods_page <- nav_panel("Methods", value = "methods", card(class = "methods", includeMarkdown("methods.md")))
 
 ui <- page_navbar(
-  id = "nav", title = span(class = "brand", "MaizeExpressC"), theme = theme, sidebar = filters, fillable = FALSE,
+  id = "nav", title = span(class = "brand", "MaizExpressC"), theme = theme, sidebar = filters, fillable = FALSE,
   header = tags$head(tags$link(rel = "stylesheet", href = "styles.css")),
   lookup_page, genelist_page, coexpr_page, rank_page, studies_page, methods_page,
   nav_spacer(), nav_item(span(class = "built", paste("data", BUILT)))
@@ -287,7 +287,7 @@ server <- function(input, output, session) {
   })
   output$restable <- renderDT(datatable(res_tab()[, !"doi"], rownames = FALSE, class = "compact stripe",
                                         options = list(pageLength = 15, scrollX = TRUE, dom = "ftip")))
-  output$dl_gene <- downloadHandler(filename = function() paste0("MaizeExpressC_", gene(), ".csv"),
+  output$dl_gene <- downloadHandler(filename = function() paste0("MaizExpressC_", gene(), ".csv"),
                                     content = function(f) fwrite(res_tab()[, `log2FC sign` := sign_lab(sign())], f))
 
   # ---- co-expression
@@ -338,7 +338,7 @@ server <- function(input, output, session) {
   observeEvent(input$pt_pos_rows_selected, pick_partner("+", input$pt_pos_rows_selected))
   observeEvent(input$pt_neg_rows_selected, pick_partner("-", input$pt_neg_rows_selected))
   output$dl_pt <- downloadHandler(
-    filename = function() sprintf("MaizeExpressC_partners_%s_%s_%s.csv", short_name(ga()), input$pt_scope,
+    filename = function() sprintf("MaizExpressC_partners_%s_%s_%s.csv", short_name(ga()), input$pt_scope,
                                   if (isTRUE(input$cg_within)) "within" else "across"),
     content = function(f) fwrite(pt()[, .(gene_id, scope, view = fifelse(view == "within", "within conditions", "across all libraries"),
                                           direction = fifelse(direction == "+", "positive", "negative"), rank, partner_id,
@@ -387,7 +387,7 @@ server <- function(input, output, session) {
     datatable(t, rownames = FALSE, class = "compact stripe", options = list(dom = "tp", pageLength = 12, scrollX = TRUE))
   })
   output$dl_cx <- downloadHandler(
-    filename = function() sprintf("MaizeExpressC_coexpression_%s_%s.csv", short_name(ga()), short_name(gb())),
+    filename = function() sprintf("MaizExpressC_coexpression_%s_%s.csv", short_name(ga()), short_name(gb())),
     content = function(f) {
       u <- cx_u(); P <- cx_P(); s <- cr_sum()
       out <- rbind(
@@ -438,7 +438,7 @@ server <- function(input, output, session) {
     p(class = "hint", sprintf("%d genes matched", length(r$genes)), if (length(r$missing)) span(class = "warn", paste0(" · not found: ", paste(r$missing, collapse = ", ")))) })
   output$heat <- renderPlotly({ x <- gl(); if (!nrow(x$Z)) return(empty_plot("No pooled estimates for these genes"))
     heat_plot(x$Z[, c("gene", setdiff(names(x$Z), c("gene", "gene_id"))), with = FALSE], x$hov, sign()) })
-  output$dl_list <- downloadHandler(filename = function() "MaizeExpressC_gene_list.csv",
+  output$dl_list <- downloadHandler(filename = function() "MaizExpressC_gene_list.csv",
                                     content = function(f) { x <- gl()$Z; fwrite(x[, c("gene_id", "gene", setdiff(names(x), c("gene_id", "gene"))), with = FALSE], f) })
 
   # ---- rank
