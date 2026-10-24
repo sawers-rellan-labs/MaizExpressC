@@ -24,3 +24,6 @@ app/rsconnect/
 
 # Claude Code local settings
 .claude/
+
+# results of studies not used in the analysis (kept locally and on sara, never published)
+results/_discarded/

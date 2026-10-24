@@ -1,22 +1,25 @@
 #!/usr/bin/env Rscript
-# TEMPLATE from MaizExpressN (nitrogen): adapt the N-specific parts (vocabularies, classes, labels, per-study rules) to cold at M6.
-# M6: pool per-contrast effects across studies.
+# M6: pool per-contrast effects across studies (cold; method as in MaizExpressN).
 #   Rscript analysis/pool_meta.R
 #
 # Input: results/de.parquet (analysis/de_per_study.R) and metadata/contrasts.tsv.
 # Only replicated contrasts with pool = TRUE and a finite lfcSE enter pooling (unreplicated and
-# display-only contrasts are shown in the app but never pooled; counts are never pooled).
+# display-only contrasts are shown in the app but never pooled; counts are never pooled). Within them,
+# genes without a p-value are left out: fold changes carried by one library (single_library) and
+# DESeq2 Cook's outliers.
 #  1. Within a study, contrasts sharing the grouping (tissue group x class) are combined by
-#     inverse variance, so a long time course or many genotypes count as one study estimate.
+#     inverse variance, so a long time course, several temperatures or many genotypes (Frey2020's
+#     22 inbreds, Zhou2022's six HY lines and its panel) count as one study estimate.
 #  2. Across studies, DerSimonian-Laird random effects (vectorised over genes).
 # Groupings, each for filter_set "all" and "B73" (contrasts whose samples are all genotype class B73):
-#   results/meta_tissue_class.parquet   tissue_group x contrast_class
-#   results/meta_tissue_level.parquet   tissue_group x all N-level classes together (contrast_class =
-#                                       "all_levels": deficiency, starvation, resupply, excess,
-#                                       field_rate, local; form contrasts are not N levels)
-# Private lab data: a catalogue column private = TRUE marks unpublished studies; with
-# MAIZEXPRESSN_PUBLIC=1 they are left out of the pooled tables (use the same setting for
-# app/prepare_data.R).
+#   results/meta_tissue_class.parquet   tissue_group x contrast_class (chilling, freezing, recovery,
+#                                       germination, chronic)
+#   results/meta_tissue_cold.parquet    tissue_group x acute cold together (contrast_class = "acute_cold":
+#                                       chilling and freezing; germination and chronic designs stay apart
+#                                       from acute chilling, as decided at M2, and recovery is not cold)
+# Private lab data: a catalogue column private = TRUE would mark unpublished studies; with
+# MAIZEEXPRESSC_PUBLIC=1 they are left out of the pooled tables (use the same setting for
+# app/prepare_data.R). The cold catalogue has no private studies yet.
 # Columns: gene_id, tissue_group, contrast_class, filter_set, k_studies, k_contrasts, pooled_log2fc,
 #   se, ci_low, ci_high, pvalue, padj (BH within each grouping and filter set), tau2, i2,
 #   n_up, n_down, n_ns (contrasts; padj < 0.05 and |log2FC| >= 1), k_studies_up, k_studies_down.
@@ -24,13 +27,13 @@
 
 suppressPackageStartupMessages({ library(data.table); library(arrow) })
 PADJ <- 0.05; LFC <- 1
-LEVEL_CLASSES <- c("deficiency", "starvation", "resupply", "excess", "field_rate", "local")
+COLD_CLASSES <- c("chilling", "freezing")
 
 cons <- fread("metadata/contrasts.tsv", colClasses = "character", na.strings = NULL)
-# public build (MAIZEXPRESSN_PUBLIC=1): leave out studies marked private = TRUE in the catalogue
-cat_ <- fread("catalogue/maize_N_rnaseq_studies.tsv", colClasses = "character", na.strings = NULL)
+# public build (MAIZEEXPRESSC_PUBLIC=1): leave out studies marked private = TRUE in the catalogue
+cat_ <- fread("catalogue/maize_cold_rnaseq_studies.tsv", colClasses = "character", na.strings = NULL)
 PRIVATE <- if ("private" %in% names(cat_)) cat_[toupper(private) == "TRUE", study_id] else character()
-if (nzchar(Sys.getenv("MAIZEXPRESSN_PUBLIC")) && length(PRIVATE)) {
+if (nzchar(Sys.getenv("MAIZEEXPRESSC_PUBLIC")) && length(PRIVATE)) {
   cons <- cons[!(study_id %in% PRIVATE)]
   message("public build: leaving out private studies ", paste(PRIVATE, collapse = ", "))
 }
@@ -40,9 +43,10 @@ cons[, all_b73 := vapply(paste(numerator_samples, denominator_samples, sep = ";"
                          function(x) all(setdiff(strsplit(x, ";", fixed = TRUE)[[1]], "") %in% b73), logical(1))]
 
 de <- as.data.table(read_parquet("results/de.parquet",
-                                 col_select = c("gene_id", "contrast_id", "study_id", "log2fc", "lfc_se", "padj")))
+                                 col_select = c("gene_id", "contrast_id", "study_id", "log2fc", "lfc_se", "pvalue", "padj",
+                                                "single_library")))
 de <- de[cons[, .(contrast_id, contrast_class, tissue_group, pool, all_b73)], on = "contrast_id", nomatch = 0]
-de <- de[pool == "TRUE" & is.finite(lfc_se) & lfc_se > 0 & is.finite(log2fc)]
+de <- de[pool == "TRUE" & is.finite(lfc_se) & lfc_se > 0 & is.finite(log2fc) & !is.na(pvalue) & !(single_library %in% TRUE)]
 de[, dir := fifelse(!is.na(padj) & padj < PADJ & log2fc >= LFC, 1L,
                fifelse(!is.na(padj) & padj < PADJ & log2fc <= -LFC, -1L, 0L))]
 message(sprintf("%d gene x contrast rows from %d contrasts in %d studies enter pooling",
@@ -74,21 +78,21 @@ pool_groups <- function(d, keys) {
         "tau2", "i2", "n_up", "n_down", "n_ns", "k_studies_up", "k_studies_down"), with = FALSE]
 }
 
-run <- function(d, level) {
+run <- function(d, cold) {
   d <- copy(d)
-  if (level) d <- d[contrast_class %in% LEVEL_CLASSES][, contrast_class := "all_levels"]
+  if (cold) d <- d[contrast_class %in% COLD_CLASSES][, contrast_class := "acute_cold"]
   out <- rbind(pool_groups(copy(d), c("tissue_group", "contrast_class"))[, filter_set := "all"],
                pool_groups(copy(d[all_b73 == TRUE]), c("tissue_group", "contrast_class"))[, filter_set := "B73"])
   setcolorder(out, c("gene_id", "tissue_group", "contrast_class", "filter_set"))
   out[order(tissue_group, contrast_class, filter_set, pvalue)]
 }
 tc <- run(de, FALSE); write_parquet(tc, "results/meta_tissue_class.parquet")
-tl <- run(de, TRUE);  write_parquet(tl, "results/meta_tissue_level.parquet")
+tk <- run(de, TRUE);  write_parquet(tk, "results/meta_tissue_cold.parquet")
 
 summ <- function(x) x[, .(genes = .N, max_k_studies = max(k_studies), genes_k2plus = sum(k_studies >= 2),
                           sig_k2plus = sum(k_studies >= 2 & padj < PADJ & abs(pooled_log2fc) >= LFC)),
                       by = .(filter_set, tissue_group, contrast_class)][order(filter_set, tissue_group, contrast_class)]
-fwrite(rbind(summ(tc), summ(tl)), "results/meta_summary.tsv", sep = "\t")
-message(sprintf("meta_tissue_class: %d rows; meta_tissue_level: %d rows", nrow(tc), nrow(tl)))
+fwrite(rbind(summ(tc), summ(tk)), "results/meta_summary.tsv", sep = "\t")
+message(sprintf("meta_tissue_class: %d rows; meta_tissue_cold: %d rows", nrow(tc), nrow(tk)))
 print(summ(tc)[filter_set == "all"])
-print(summ(tl)[filter_set == "all"])
+print(summ(tk)[filter_set == "all"])

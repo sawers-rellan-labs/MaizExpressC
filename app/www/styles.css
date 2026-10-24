@@ -1,8 +1,8 @@
-/* MaizeExpressC: quiet laboratory notebook. Ink on white, one deep-green accent,
+/* MaizeExpressC: quiet laboratory notebook. Ink on white, one deep cold-blue accent,
    contrast classes carry the colour (Okabe-Ito). */
 :root {
   --ink: #22303A; --ink-2: #4A5866; --muted: #6B7884; --line: #E1E5E8;
-  --wash: #F5F7F6; --accent: #1F6F5C; --accent-wash: #E7F1EE; --warn: #9A5B00;
+  --wash: #F5F7F6; --accent: #1D5873; --accent-wash: #E6EFF4; --warn: #9A5B00;
 }
 body { color: var(--ink); background: #FFFFFF; }
 .navbar .brand { font-family: Spectral, Georgia, serif; font-weight: 600; font-size: 1.35rem; letter-spacing: 0.01em; }
@@ -43,3 +43,18 @@ table.dataTable { font-variant-numeric: tabular-nums; font-size: 0.84rem; }
 .legend .lg { display: inline-flex; align-items: center; gap: 5px; }
 .legend .sw { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
 .legend .sw.open { border: 1.6px solid var(--muted); background: #FFFFFF; }
+.legend .sw.x { border-radius: 0; width: auto; height: auto; font-size: 1rem; line-height: 10px; color: var(--muted); font-weight: 700; }
+.pt-tables table.dataTable { font-size: 0.82rem; }
+.pt-tables table.dataTable tbody tr { cursor: pointer; }
+.genecard details.more { display: inline; margin-left: 6px; }
+.genecard details.more summary { display: inline; cursor: pointer; color: var(--muted); text-decoration: underline dotted; }
+.genecard details.more[open] { display: block; margin: 4px 0 0; }
+.genecard .tag.lof { margin-left: 0; color: var(--warn); border-color: var(--warn); }
+.genecard .pw-go { color: var(--accent); text-decoration: none; white-space: nowrap; }
+.genecard .pg-strip { display: inline-flex; gap: 1px; vertical-align: middle; margin-left: 4px; }
+.genecard .pg-cell { width: 6px; height: 12px; border-radius: 1px; border: 1px solid var(--accent); }
+.genecard .pg-cell.on { background: var(--accent); }
+.genecard .pg-cell.off { background: transparent; border-color: var(--muted); }
+.genecard .sym .tag.ctl { font-family: "IBM Plex Sans", system-ui, sans-serif; font-size: 0.74rem; font-weight: 500;
+  vertical-align: middle; margin-left: 10px; color: var(--accent); border-color: var(--accent); }
+.genecard .sym .tag.ctl.positive_control { background: var(--accent-wash); }

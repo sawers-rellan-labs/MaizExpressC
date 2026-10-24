@@ -23,7 +23,7 @@ P, S, PT, X, R = "primary", "shared", "partial", "exclude", "review"
 D = [
     # study, accession, status, role, evidence_type, evidence, notes
     ("Avila2018", "SRP162337", "resolved", P, "paper_statement", "Paper text gives SRP162337 (Europe PMC / PMC full text)", "BioProject PRJNA492469. 24 runs."),
-    ("Bozic2025", "PRJEB80094", "resolved", P, "paper_statement", "Data availability statement (PMC)", "ENA. 8 runs, one library per genotype x treatment x time (no replicates)."),
+    ("Bozic2025", "PRJEB80094", "resolved", "not_used", "paper_statement", "Data availability statement (PMC)", "ENA. 8 runs, one library per genotype x treatment x time (no replicates). Not used in this analysis (Rubén, 24 Oct 2026)."),
     ("Cao2022", "", "not_found", "", "paper_statement", "Data availability statement: 'Not applicable' (PMC web page)", "No deposit stated. Line-name search found large 18-599 projects (PRJNA957932, PRJNA644582) with no cold runs identified."),
     ("Dou2025", "PRJNA1050059", "resolved", S, "paper_statement", "Paper states PRJNA1050059 (PMC)", "Same BioProject as Zhang2024 (12 runs); libraries owned by Zhang2024."),
     ("Du2023", "", "not_found", "", "paper_statement", "Data availability statement: 'Not applicable' (PMC web page)", "No deposit stated; no repository match for Ye478 low-temperature germination."),
@@ -45,7 +45,7 @@ D = [
     ("Li2022c", "PRJNA778546", "resolved", P, "paper_statement", "Paper (PMC web page)", "15 runs."),
     ("Li2022d", "PRJNA759333", "resolved", P, "harvested", "PMC full-text scan", "24 runs (two near-isogenic lines)."),
     ("Li2025", "GSE299259", "resolved", P, "harvested", "PMC full-text scan", "18 runs (zmzfp69 mutant vs WT)."),
-    ("Liu2026", "PRJNA1393347", "resolved", P, "harvested", "PMC full-text scan", "84 runs, matching the paper's 84 libraries (cold, heat, drought)."),
+    ("Liu2026", "PRJNA1393347", "resolved", "not_used", "harvested", "PMC full-text scan", "84 runs, matching the paper's 84 libraries (cold, heat, drought). Not used in this analysis (Rubén, 24 Oct 2026)."),
     ("Lu2017", "GSE76939", "resolved", P, "paper_statement", "Paper (PMC) and NCBI PubMed link", "Teosinte (Zea mays subsp. mexicana), 6 runs; BioProject PRJNA309111, SRP068562."),
     ("Lu2017", "PRJNA866469", "resolved", X, "agent", "Listed by the screening agent", "Zea luxurians genome project; not this study's RNA-seq."),
     ("Makarevitch2015", "PRJNA244661", "resolved", P, "paper_statement", "Data availability statement (PMC)", "33 runs (cold, heat, salt, UV; B73, Mo17, Oh43 and later B37/PH207 runs used by Waters2017). Corrected S1 table (erratum PMC4599801) maps runs to samples."),

@@ -1,24 +1,30 @@
 #!/usr/bin/env Rscript
-# TEMPLATE from MaizExpressN (nitrogen): adapt the N-specific parts (vocabularies, classes, labels, per-study rules) to cold at M7.
 # M7: build the app's data folder from the project outputs.
 #   Rscript app/prepare_data.R            (from the project root; writes app/data/)
-#   MAIZEXPRESSN_PUBLIC=1 Rscript app/prepare_data.R   public build without private (unpublished) studies
+#   MAIZEEXPRESSC_PUBLIC=1 Rscript app/prepare_data.R   public build without private (unpublished) studies
 #
 # Small tables are written whole and loaded at start-up. Per-gene tables (DE results and TPM)
 # are split into ~440 files by gene-ID bucket (the 3 digits after "Zm00001eb"), so a gene lookup
 # reads one small file.
 #   app/data/genes.parquet, gene_aliases.parquet, go_terms.parquet      (annotation, M5)
+#   app/data/cold_controls.parquet  cold positive controls (annotation/cold_positive_controls.tsv)
 #   app/data/contrasts.parquet   one row per contrast in the analysis (tested or display only), with study,
-#                                class, tissue, system, stage, genotype class and samples used
+#                                class, tissue, temperatures, time, system, stage, genotype class, cold
+#                                tolerance, samples used, and how many DREB1/CBF positive controls came up
 #   app/data/samples.parquet     samples in the gene tables, with condition labels and QC
 #   app/data/studies.parquet     the studies in the analysis (at least one tested or display-only contrast)
-# Only studies used in the analysis reach the app (Rubén, 19 Oct 2026): studies that were dropped, deferred,
-# have no data or no contrasts are not listed, and no reasons for dropping a study are shipped. Library QC
-# exclusions are not reported per study or per contrast either: library counts and mapping rates describe
-# the libraries in use, and Methods gives only the QC rules.
-#   app/data/meta_tissue_class.parquet, meta_tissue_level.parquet       (pooling, M6)
+# Only studies used in the analysis reach the app: studies that were dropped, have no data or no
+# contrasts are not listed, and no reasons for dropping a study are shipped. Library QC exclusions are
+# not reported per study or per contrast either: library counts and mapping rates describe the
+# libraries in use, and Methods gives only the QC rules.
+#   app/data/meta_tissue_class.parquet, meta_tissue_cold.parquet       (pooling, M6)
 #   app/data/de/<bucket>.parquet   results/de.parquet split by gene bucket
 #   app/data/tpm/<bucket>.parquet  gene x sample TPM and estimated counts (included, non-excluded samples)
+#   app/data/pathways, gwas_hits, variants, pangenes .parquet and maizemine_release.json   MaizeMine extras
+#                                for the gene card (annotation/fetch_maizemine.py, then annotation/build_parquet.R)
+#   app/data/atlas/<bucket>.parquet, atlas_samples.parquet   B73 expression atlas (MaizeMine)
+#   app/data/literature.parquet   gene-specific papers (annotation/fetch_literature.py, NCBI gene2pubmed)
+# Then run app/prepare_partners.R: it builds app/data/partners/ (co-expression partner lists) from these tables.
 
 suppressPackageStartupMessages({ library(data.table); library(arrow) })
 out <- "app/data"
@@ -26,17 +32,20 @@ dir.create(file.path(out, "de"), recursive = TRUE, showWarnings = FALSE)
 dir.create(file.path(out, "tpm"), recursive = TRUE, showWarnings = FALSE)
 bucket <- function(g) substr(g, 10, 12)
 unlink(Sys.glob(file.path(out, c("de", "tpm"), "*.parquet")))   # no stale buckets from an earlier build
+nr <- function(x) fifelse(x %in% c("", "NR"), "Not reported", x)
 
 # annotation
 for (f in c("genes", "gene_aliases", "go_terms"))
   file.copy(file.path("annotation", paste0(f, ".parquet")), file.path(out, paste0(f, ".parquet")), overwrite = TRUE)
+ctl <- fread("annotation/cold_positive_controls.tsv", colClasses = "character")
+write_parquet(ctl[, .(gene_id, symbol, group, role)], file.path(out, "cold_controls.parquet"))
 
 # catalogue, samples, QC
-cat_ <- fread("catalogue/maize_N_rnaseq_studies.tsv", colClasses = "character", na.strings = NULL)
-# public build (MAIZEXPRESSN_PUBLIC=1): leave out studies marked private = TRUE (unpublished lab data);
+cat_ <- fread("catalogue/maize_cold_rnaseq_studies.tsv", colClasses = "character", na.strings = NULL)
+# public build (MAIZEEXPRESSC_PUBLIC=1): leave out studies marked private = TRUE (unpublished lab data);
 # run analysis/pool_meta.R with the same setting first so the pooled tables match
 PRIVATE <- if ("private" %in% names(cat_)) cat_[toupper(private) == "TRUE", study_id] else character()
-PUBLIC <- nzchar(Sys.getenv("MAIZEXPRESSN_PUBLIC"))
+PUBLIC <- nzchar(Sys.getenv("MAIZEEXPRESSC_PUBLIC"))
 drop <- if (PUBLIC) PRIVATE else character()
 if (length(drop)) message("public build: leaving out private studies ", paste(drop, collapse = ", "))
 smp <- fread("metadata/samples.tsv", colClasses = "character", na.strings = NULL)
@@ -44,12 +53,17 @@ qc <- fread("metadata/library_qc.tsv", colClasses = "character")
 excl <- fread("metadata/library_exclusions.tsv", colClasses = "character")
 cons <- fread("metadata/contrasts.tsv", colClasses = "character", na.strings = NULL)[!(study_id %in% drop)]
 summ <- fread("results/de_summary.tsv", colClasses = "character", na.strings = NULL)
+de <- as.data.table(read_parquet("results/de.parquet"))
 
-# contrasts
-first <- function(x) sub(";.*$", "", x)
+# contrasts: genotype class, stage and cold tolerance over all the contrast's samples ("mixed" when they differ)
+split_ids <- function(x) setdiff(strsplit(x, ";", fixed = TRUE)[[1]], "")
+one_or_mixed <- function(v) { v <- unique(v); if (length(v) == 1) v else "mixed" }
 cm <- copy(cons)
-cm[, first_num := first(numerator_samples)]
-cm <- smp[, .(first_num = sample_id, stage_class, genotype_class)][cm, on = "first_num"]
+side <- cm[, .(sample_id = split_ids(paste(numerator_samples, denominator_samples, sep = ";"))), by = contrast_id]
+side <- smp[, .(sample_id, genotype_class, stage_class = nr(stage_class), cold_tolerance = nr(cold_tolerance))][side, on = "sample_id"]
+side <- side[, .(genotype_class = one_or_mixed(genotype_class), stage_class = one_or_mixed(stage_class),
+                 cold_tolerance = one_or_mixed(cold_tolerance)), by = contrast_id]
+cm <- side[cm, on = "contrast_id"]
 cm <- cat_[, .(study_id, system_group, doi_url, year, first_author, title)][cm, on = "study_id"]
 cm <- summ[, .(contrast_id, n_num_used = n_numerator, n_den_used = n_denominator, tested_replicated = replicated,
                n_up, n_down, note)][cm, on = "contrast_id"]
@@ -58,13 +72,26 @@ cm[, status := fifelse(!is.na(note) & grepl("no samples", note), "skipped",
                 fifelse(tested_replicated == "TRUE", "tested", "display only")))]
 cm <- cm[status %in% c("tested", "display only")]   # skipped / not run contrasts contribute nothing
 used <- sort(unique(cm$study_id))
-cm[, `:=`(time_h = suppressWarnings(as.numeric(time_h)), pool = pool == "TRUE",
-          replicated = tested_replicated == "TRUE",
-          system_group = fifelse(system_group %in% c("", "NR"), "Not reported", system_group),
-          stage_class = fifelse(stage_class %in% c("", "NR"), "Not reported", stage_class))]
-cm <- cm[, .(contrast_id, study_id, contrast_class, tissue_group, tissue_detail, genotype, genotype_class,
-             numerator_group, denominator_group, N_numerator, N_denominator, time_h, other_factor_level,
-             tags, pool, replicated, status, n_num_used, n_den_used, n_up, n_down,
+# positive controls: DREB1/CBF genes significantly up (replicated contrasts) out of those tested
+dreb <- ctl[role == "positive_control", gene_id]
+pc <- de[gene_id %in% dreb & replicated == TRUE, .(dreb1_tested = sum(!is.na(padj)), dreb1_up = sum(padj < 0.05 & log2fc > 0, na.rm = TRUE)),
+         by = contrast_id]
+cm <- pc[cm, on = "contrast_id"]
+# short names for studies with several tissue details in one tissue group (forest-plot labels;
+# Zhou2024's root zones are already named by their other factor)
+TISSUE_SHORT <- c("S2 leaf, 5 cm of leaf base" = "V3 S2 leaf base", "S2 leaf, 5 cm of leaf tip" = "V3 S2 leaf tip",
+                  "5 cm of leaf base" = "V3 leaf base", "V1 pooled leaf" = "V1 leaf", "V3 leaf tissue" = "V3 leaf",
+                  "leaf sheath" = "V3 sheath", "primary root (V1)" = "V1 root", "primary root (V3)" = "V3 root",
+                  "stem and shoot apical" = "SAM", "top crown" = "top crown", "bottom crown" = "bottom crown")
+cm[, tissue_short := ""]
+for (k in names(TISSUE_SHORT))
+  cm[study_id %in% c("Crow2020", "Xue2021") & tissue_short == "" & grepl(k, tissue_detail, fixed = TRUE), tissue_short := TISSUE_SHORT[[k]]]
+cm[, `:=`(time_h = suppressWarnings(as.numeric(time_h)), recovery_h = suppressWarnings(as.numeric(recovery_h)),
+          cold_C = as.numeric(cold_C), control_C = as.numeric(control_C), pool = pool == "TRUE",
+          replicated = tested_replicated == "TRUE", system_group = nr(system_group))]
+cm <- cm[, .(contrast_id, study_id, contrast_class, tissue_group, tissue_detail, tissue_short, genotype, genotype_class, cold_tolerance,
+             numerator_group, denominator_group, temp_numerator, temp_denominator, cold_C, control_C, time_h, recovery_h,
+             other_factor_level, tags, pool, replicated, status, n_num_used, n_den_used, n_up, n_down, dreb1_tested, dreb1_up,
              system_group, stage_class, doi_url, first_author, year, title, sign_note, notes,
              numerator_samples, denominator_samples)]
 write_parquet(cm, file.path(out, "contrasts.parquet"))
@@ -75,18 +102,20 @@ in_use <- smp[include == "TRUE" & !(sample_id %in% excl$sample_id), sample_id]  
 q <- qc[sample_id %in% in_use, .(libraries = .N, median_mapped_pct = median(as.numeric(percent_mapped))), by = study_id]
 st <- q[st, on = "study_id"]
 st[, n_contrasts := cm[, .N, by = study_id][st, on = "study_id", x.N]]
+st[, system_group := nr(system_group)]
 write_parquet(st[, .(study_id, first_author, year, title, journal, doi_url, design_category, genotypes, tissue,
-                     tissue_group, growth_system, system_group, N_treatments, accession,
-                     libraries, median_mapped_pct, n_contrasts)], file.path(out, "studies.parquet"))
+                     tissue_group, growth_system, system_group, cold_treatments, control_temperature, timepoints_duration,
+                     accession, libraries, median_mapped_pct, n_contrasts)], file.path(out, "studies.parquet"))
 
 # samples and TPM (studies with gene tables; included and not excluded)
 studies_q <- intersect(basename(dirname(Sys.glob("results/*/salmon.merged.gene_tpm.tsv"))), used)
 keep_s <- smp[include == "TRUE" & !(sample_id %in% excl$sample_id) & study_id %in% studies_q]
 keep_s <- qc[, .(sample_id, reads_mapped = as.numeric(reads_mapped), percent_mapped = as.numeric(percent_mapped))][keep_s, on = "sample_id"]
 keep_s[, group := sub("_R[0-9]+[a-z]?$", "", sub(paste0("^", study_id, "_"), "", sample_id)), by = study_id]
-write_parquet(keep_s[, .(sample_id, study_id, group, genotype, genotype_class, tissue_group, tissue_detail,
-                         N_label_paper, N_form, N_amount, N_unit, N_rank_in_study, phase, time_h,
-                         other_factor_level, replicate, reads_mapped, percent_mapped)],
+keep_s[, `:=`(temperature_C = as.numeric(temperature_C), cold_tolerance = nr(cold_tolerance))]
+write_parquet(keep_s[, .(sample_id, study_id, group, genotype, genotype_class, cold_tolerance, tissue_group, tissue_detail,
+                         temp_label_paper, temperature_C, temperature_night_C, control_temperature_C, temp_rank_in_study,
+                         phase, time_h, recovery_h, other_factor_level, replicate, reads_mapped, percent_mapped)],
               file.path(out, "samples.parquet"))
 
 tpm_long <- rbindlist(lapply(studies_q, function(s) {
@@ -108,13 +137,31 @@ message(sprintf("tpm: %d rows in %d buckets", nrow(tpm_long), uniqueN(tpm_long$b
 rm(tpm_long); invisible(gc())
 
 # DE results by bucket
-de <- as.data.table(read_parquet("results/de.parquet"))[contrast_id %in% cm$contrast_id]
+de <- de[contrast_id %in% cm$contrast_id]
 de[, b := bucket(gene_id)]
 for (bb in unique(de$b))
   write_parquet(de[b == bb][, b := NULL], file.path(out, "de", paste0(bb, ".parquet")))
 message(sprintf("de: %d rows in %d buckets", nrow(de), uniqueN(de$b)))
 
-for (f in c("meta_tissue_class", "meta_tissue_level"))
+# MaizeMine extras for the gene card (small tables, copied whole)
+if (file.exists("annotation/pangenes.parquet")) {
+  for (f in c("pathways", "gwas_hits", "variants", "pangenes"))
+    file.copy(file.path("annotation", paste0(f, ".parquet")), file.path(out, paste0(f, ".parquet")), overwrite = TRUE)
+  file.copy("annotation/source/maizemine/release.json", file.path(out, "maizemine_release.json"), overwrite = TRUE)
+  message("maizemine: pathways, GWAS hits, variants and pan-genes copied")
+}
+if (file.exists("annotation/atlas.parquet")) {   # B73 atlas split by gene bucket; samples whole
+  dir.create(file.path(out, "atlas"), showWarnings = FALSE)
+  unlink(Sys.glob(file.path(out, "atlas", "*.parquet")))
+  a <- as.data.table(read_parquet("annotation/atlas.parquet"))[, b := bucket(gene_id)]
+  for (bb in unique(a$b)) write_parquet(a[b == bb][, b := NULL], file.path(out, "atlas", paste0(bb, ".parquet")))
+  file.copy("annotation/atlas_samples.parquet", file.path(out, "atlas_samples.parquet"), overwrite = TRUE)
+  message(sprintf("atlas: %d values in %d buckets", nrow(a), uniqueN(a$b)))
+}
+if (file.exists("annotation/literature.parquet"))
+  file.copy("annotation/literature.parquet", file.path(out, "literature.parquet"), overwrite = TRUE)
+
+for (f in c("meta_tissue_class", "meta_tissue_cold"))
   file.copy(file.path("results", paste0(f, ".parquet")), file.path(out, paste0(f, ".parquet")), overwrite = TRUE)
 writeLines(format(Sys.time(), "%d %b %Y %H:%M"), file.path(out, "BUILT"))
 message("app data written to ", out)

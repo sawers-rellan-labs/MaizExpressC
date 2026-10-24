@@ -1,9 +1,8 @@
-# TEMPLATE from MaizExpressN (nitrogen): adapt the N-specific parts (vocabularies, classes, labels, per-study rules) to cold at M7.
 # Plotly figures for the MaizeExpressC app.
 
 INK <- "#22303A"; MUTED <- "#6B7884"; GRID <- "#E6E9EC"
 FONT <- list(family = "IBM Plex Sans, system-ui, sans-serif", size = 12, color = INK)
-sign_lab <- function(sign) if (sign > 0) "log2(low N / high N)" else "log2(high N / low N)"
+sign_lab <- function(sign) if (sign > 0) "log2(cold / control)" else "log2(control / cold)"
 base_layout <- function(p, ...) {
   layout(p, font = FONT, paper_bgcolor = "rgba(0,0,0,0)", plot_bgcolor = "rgba(0,0,0,0)",
          hoverlabel = list(bgcolor = "white", bordercolor = "#C9D1D8", font = list(color = INK, size = 12)),
@@ -11,6 +10,17 @@ base_layout <- function(p, ...) {
 }
 hrs <- function(t) ifelse(is.na(t), "", ifelse(t < 1, paste0(round(t * 60), " min"), paste0(signif(t, 3), " h")))
 fmt <- function(x, d = 2) ifelse(is.na(x), "–", formatC(x, format = "f", digits = d, flag = "+"))
+degC <- function(t) ifelse(is.na(t), "", paste0(formatC(t, format = "fg"), " \u00b0C"))
+# library colours by temperature within the shown study: blue = coldest, red = warmest, orange = recovery
+temp_col <- function(temp, phase) {
+  t <- suppressWarnings(as.numeric(temp)); lv <- sort(unique(t[!is.na(t)]))
+  pal <- if (length(lv) > 1) setNames(grDevices::colorRampPalette(c("#2166AC", "#BFA6A0", "#B2182B"))(length(lv)), lv)
+         else setNames(rep("#3C4650", length(lv)), lv)
+  col <- unname(pal[as.character(t)])
+  col[phase == "recovery"] <- "#E69F00"
+  col[is.na(col)] <- "#8A949C"
+  col
+}
 fmtp <- function(p) ifelse(is.na(p), "–", ifelse(p < 1e-4, formatC(p, format = "e", digits = 1), formatC(p, format = "f", digits = 4)))
 empty_plot <- function(msg) {
   plot_ly(type = "scatter", mode = "markers") |>
@@ -20,12 +30,16 @@ empty_plot <- function(msg) {
 
 short_label <- function(e) {
   parts <- e$study_id
-  geno <- ifelse(e$genotype_class != "B73" & nzchar(e$genotype) & !grepl(" / ", e$genotype),
-                 substr(sub("\\s*\\(.*\\)", "", e$genotype), 1, 16), "")
-  ofl <- ifelse(nzchar(e$other_factor_level) & !grepl(" / ", e$other_factor_level) & e$contrast_class != "local",
-                substr(sub("\\s*\\(.*\\)", "", e$other_factor_level), 1, 16), "")
-  tim <- hrs(e$time_h)
-  lab <- paste(parts, geno, ofl, tim, sep = " · ")
+  g <- sub("\\s*\\(.*\\)", "", e$genotype)
+  g <- ifelse(nchar(g) > 16, sub("\\s.*$", "", g), g)               # long names: first word (Crow2020 haplotypes)
+  geno <- ifelse(e$genotype_class != "B73" & nzchar(e$genotype) & !grepl(" / ", e$genotype), substr(g, 1, 16), "")
+  # other factor of the cold side (for split chilling or combined treatments the two sides differ)
+  ofl <- ifelse(nzchar(e$other_factor_level), substr(sub("\\s*\\(.*$", "", sub(" / .*$", "", e$other_factor_level)), 1, 16), "")
+  ofl[ofl == "none"] <- ""
+  ofl <- sub("^([A-Z]{2,3}) .*$", "\\1", ofl)                  # experiment codes (Zhou2022 HY, TC, NM)
+  tim <- ifelse(e$contrast_class == "recovery" & !is.na(e$recovery_h), paste0(hrs(e$recovery_h), " back"), hrs(e$time_h))
+  tis <- if ("tissue_short" %in% names(e)) e$tissue_short else ""
+  lab <- paste(parts, geno, tis, ofl, degC(e$cold_C), tim, ifelse(grepl("secondary_control", e$tags), "vs 0 h", ""), sep = " · ")
   gsub("( · )+", " · ", sub("( · )+$", "", lab))
 }
 
@@ -34,26 +48,32 @@ forest_plot <- function(e, sign) {
   e <- copy(e)
   e[, `:=`(x = sign * log2fc, ci = fifelse(is.finite(lfc_se), 1.96 * lfc_se, NA_real_),
            cls = factor(contrast_class, levels = CLASSES), tis = factor(tissue_group, levels = TISSUES))]
+  # replicated estimates without a p-value are not pooled: carried by one library, or a DESeq2 Cook's outlier
+  e[, style := fifelse(!replicated, "unrep", fifelse(is.finite(lfc_se) & is.na(pvalue), "nopool", "rep"))]
+  e[, why := fifelse(style != "nopool", "", fifelse(single_library %in% TRUE, "<br><i>carried by one library: no p-value, not pooled</i>",
+                                                    "<br><i>DESeq2 outlier (Cook's distance): no p-value, not pooled</i>"))]
   setorder(e, tis, cls, study_id, time_h)
   e[, row := .I]
   e[, lab := make.unique(short_label(.SD), sep = " #")]
   e[, hover := paste0("<b>", study_id, "</b> · ", CLASS_LABEL[contrast_class], ifelse(replicated, "", " · unreplicated"),
                       "<br>", tissue_group, " · ", tissue_detail, "<br>", genotype,
-                      "<br>", numerator_group, " (", N_numerator, ")<br>vs ", denominator_group, " (", N_denominator, ")",
-                      ifelse(is.na(time_h), "", paste0("<br>time ", hrs(time_h))),
+                      "<br>", numerator_group, " (", temp_numerator, ")<br>vs ", denominator_group, " (", temp_denominator, ")",
+                      ifelse(is.na(time_h), "", paste0("<br>", hrs(time_h), " since the cold started")),
+                      ifelse(is.na(recovery_h), "", paste0(", ", hrs(recovery_h), " back at the control temperature")),
                       "<br>", sign_lab(sign), " = ", fmt(x),
                       ifelse(is.na(ci), " (no SE)", paste0(" [", fmt(x - ci), ", ", fmt(x + ci), "]")),
-                      "<br>padj = ", fmtp(padj), " · n = ", n_num_used, " vs ", n_den_used)]
-  lim <- min(10, max(2, ceiling(max(abs(e$x) + ifelse(is.na(e$ci), 0, e$ci), na.rm = TRUE) + 0.3)))
+                      "<br>padj = ", fmtp(padj), " · n = ", n_num_used, " vs ", n_den_used, why)]
+  lim <- min(14, max(2, ceiling(max(abs(e$x) + ifelse(is.na(e$ci), 0, e$ci), na.rm = TRUE) + 0.3)))
   p <- plot_ly(height = max(220, 18 * nrow(e) + 60))
-  for (cl in intersect(CLASSES, unique(e$contrast_class))) for (rep in c(TRUE, FALSE)) {
-    d <- e[contrast_class == cl & replicated == rep]
+  for (cl in intersect(CLASSES, unique(e$contrast_class))) for (st in c("rep", "unrep", "nopool")) {
+    d <- e[contrast_class == cl & style == st]
     if (!nrow(d)) next
     p <- add_trace(p, data = d, x = ~x, y = ~row, type = "scatter", mode = "markers", name = CLASS_LABEL[cl],
                    showlegend = FALSE,
-                   error_x = list(type = "data", array = d$ci, color = CLASS_COL[[cl]], thickness = 1.6, width = 3),
-                   marker = list(color = if (rep) CLASS_COL[[cl]] else "white", size = 9, symbol = "circle",
-                                 line = list(color = CLASS_COL[[cl]], width = 1.6)),
+                   error_x = list(type = "data", array = d$ci, color = CLASS_COL[[cl]], thickness = if (st == "nopool") 1 else 1.6, width = 3),
+                   marker = list(color = if (st == "unrep") "white" else CLASS_COL[[cl]], size = 9,
+                                 symbol = if (st == "nopool") "x" else "circle",
+                                 line = list(color = if (st == "nopool") "white" else CLASS_COL[[cl]], width = if (st == "nopool") 0.8 else 1.6)),
                    text = ~hover, hoverinfo = "text")
   }
   tis_breaks <- e[, .(start = min(row), end = max(row)), by = tis]
@@ -74,7 +94,7 @@ pooled_plot <- function(P, sign) {
   if (!nrow(P)) return(empty_plot("Nothing to pool: needs replicated, poolable contrasts"))
   P <- copy(P)
   P[, `:=`(x = sign * est, ci = 1.96 * se, tis = factor(tissue_group, levels = TISSUES),
-           cls = factor(contrast_class, levels = c(CLASSES, "all_levels")))]
+           cls = factor(contrast_class, levels = c(CLASSES, "acute_cold")))]
   setorder(P, tis, cls); P[, row := .I]
   P[, lab := paste0(tissue_group, " · ", CLASS_LABEL[contrast_class])]
   P[, hover := paste0("<b>", lab, "</b><br>", sign_lab(sign), " = ", fmt(x), " [", fmt(x - ci), ", ", fmt(x + ci), "]",
@@ -102,9 +122,7 @@ pooled_plot <- function(P, sign) {
 expr_plot <- function(x, logy) {
   if (!nrow(x)) return(empty_plot("No expression for this gene in this study"))
   x <- copy(x)
-  ranks <- sort(unique(suppressWarnings(as.integer(x$N_rank_in_study))))
-  pal <- if (length(ranks) > 1) setNames(grDevices::colorRampPalette(c("#B2182B", "#BFA6A0", "#2166AC"))(length(ranks)), ranks) else c(`1` = "#3C4650")
-  x[, col := pal[as.character(N_rank_in_study)]]; x[is.na(col), col := "#8A949C"]
+  x[, col := temp_col(temperature_C, phase)]
   x[, y := if (logy) pmax(tpm, 0.01) else tpm]
   m <- x[, .(mean = mean(tpm), col = col[1]), by = cond]
   m[, ym := if (logy) pmax(mean, 0.01) else mean]
@@ -113,7 +131,7 @@ expr_plot <- function(x, logy) {
     add_bars(data = m, x = ~factor(cond, levels = lv), y = ~ym, marker = list(color = ~col, opacity = 0.18, line = list(color = ~col, width = 1.4)),
              hovertext = ~paste0(cond, "<br>mean TPM ", signif(mean, 3)), hoverinfo = "text", showlegend = FALSE) |>
     add_markers(data = x, x = ~factor(cond, levels = lv), y = ~y, marker = list(color = ~col, size = 9, line = list(color = "white", width = 1)),
-                hovertext = ~paste0(sample_id, "<br>TPM ", signif(tpm, 3), "<br>", N_label_paper), hoverinfo = "text", showlegend = FALSE)
+                hovertext = ~paste0(sample_id, "<br>TPM ", signif(tpm, 3), "<br>", temp_label_paper, " · ", degC(temperature_C)), hoverinfo = "text", showlegend = FALSE)
   base_layout(p, bargap = 0.35,
     xaxis = list(title = "", tickangle = -30, tickfont = list(size = 11)),
     yaxis = list(title = "TPM", type = if (logy) "log" else "linear", gridcolor = GRID, dtick = if (logy) 1 else NULL),
@@ -131,13 +149,15 @@ tc_plot <- function(e, sign) {
     l <- unique(e$line)[i]; d <- e[line == l][order(time_h)]
     p <- add_trace(p, data = d, x = ~time_h, y = ~x, type = "scatter", mode = "lines+markers", name = l,
                    line = list(color = pal[(i - 1) %% 6 + 1], width = 2),
-                   marker = list(color = pal[(i - 1) %% 6 + 1], size = 8, symbol = ifelse(d$replicated, "circle", "circle-open")),
+                   marker = list(color = pal[(i - 1) %% 6 + 1], size = 8,
+                                 symbol = ifelse(!d$replicated, "circle-open", ifelse(is.finite(d$lfc_se) & is.na(d$pvalue), "x", "circle"))),
                    error_y = list(type = "data", array = d$ci, color = pal[(i - 1) %% 6 + 1], thickness = 1, width = 3),
-                   hovertext = ~paste0(line, "<br>", hrs(time_h), " · ", fmt(x), "<br>padj ", fmtp(padj)), hoverinfo = "text")
+                   hovertext = ~paste0(line, "<br>", hrs(time_h), " · ", fmt(x), "<br>padj ", fmtp(padj),
+                                       ifelse(single_library %in% TRUE, "<br><i>carried by one library</i>", "")), hoverinfo = "text")
   }
-  tv <- c(5/60, 15/60, 0.5, 1, 2, 4, 8, 24, 48, 96, 168, 336, 720, 1440)
+  tv <- c(5/60, 15/60, 0.5, 1, 2, 4, 8, 24, 48, 96, 168, 336, 720)
   tv <- tv[tv >= min(e$time_h) / 1.5 & tv <= max(e$time_h) * 1.5]
-  base_layout(p, xaxis = list(title = "time since the N change (log scale)", type = "log", gridcolor = GRID,
+  base_layout(p, xaxis = list(title = "time since the cold started (log scale)", type = "log", gridcolor = GRID,
                               tickvals = tv, ticktext = hrs(tv)),
               yaxis = list(title = sign_lab(sign), zeroline = TRUE, zerolinecolor = MUTED, gridcolor = GRID),
               legend = list(orientation = "h", y = -0.25), margin = list(l = 55, r = 10, t = 10, b = 60))
@@ -171,5 +191,6 @@ volcano_plot <- function(m, sign) {
 class_legend <- function(classes = CLASSES) {
   htmltools::span(class = "legend", lapply(classes, function(cl)
     htmltools::span(class = "lg", htmltools::span(class = "sw", style = paste0("background:", CLASS_COL[[cl]])), CLASS_LABEL[[cl]])),
-    htmltools::span(class = "lg", htmltools::span(class = "sw open"), "unreplicated"))
+    htmltools::span(class = "lg", htmltools::span(class = "sw open"), "unreplicated"),
+    htmltools::span(class = "lg", htmltools::span(class = "sw x", "\u00d7"), "not pooled (one library or outlier)"))
 }

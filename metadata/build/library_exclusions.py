@@ -14,6 +14,18 @@ count tables in results/<study>/, and writes metadata/library_exclusions.tsv
        median within-group r AND > 0.03 below the other replicates' r among themselves;
      - in a group of 2, the pair's r is > 0.05 below the study's median within-group r
        (both go: there is no telling which one is wrong).
+  5. tissue carry-over (as in MaizExpressN, Rubén 22 Oct 2026; root, leaf and shoot libraries, not whole
+     seedlings or seeds): the other tissue's markers make up >= 3x the share of mRNA of the study x tissue median,
+     >= 0.5 points above it, >= 3x the median of its replicates (if any), and >= 20% of those markers are >= 3x
+     their study x tissue median. The cold studies have only one study with both tissues, so the markers and
+     their reference TPM come from MaizExpressN's 10 two-tissue studies: metadata/build/tissue_markers.tsv.
+Two amendments for the cold data (approved, Rubén 24 Oct 2026):
+  A. SAME_PREP_STRANDED: ISF and ISR (or SF and SR) count as the same prep for rule 3. Friero2023 has 6 ISF and
+     8 ISR libraries with the same depth, mapping and replicate r: one stranded prep, mates uploaded in either order.
+  B. EXEMPT_LOW_GROUPS: the relative part of rule 2 is not applied when the library's whole replicate group maps
+     > 10 points below the study x tissue x genotype median (group median). Long cold lowers mapping in every
+     replicate because more fragments fall on the genome outside transcripts (salmon decoys: He2023a 13% -> 22% at
+     2 C for 72-120 h, back to 12% after 24 h recovery; Wang2023 15% at 0 h -> 26% at 7 d), a condition effect.
 Excluded libraries are left out of every DESeq2 fit; the samples stay in samples.tsv.
 Contrasts that lose replication become display-only (de_per_study.R treats them as unreplicated).
 Usage: python3 metadata/build/library_exclusions.py
@@ -35,8 +47,16 @@ MIN_PCT = 60.0
 MAX_BELOW_MEDIAN = 10.0
 R_MARGIN_3 = 0.03
 R_MARGIN_2 = 0.05
-GROUP_KEY = ["study_id", "genotype", "tissue_group", "tissue_detail", "N_label_paper", "N_form", "N_amount",
-             "N_unit", "N_rank_in_study", "phase", "time_h", "other_factor", "other_factor_level"]
+CARRY_FOLD = 3.0                      # x the study x tissue median and x the replicates' median
+CARRY_EXCESS = 0.5                    # percentage points of other-tissue mRNA above the study x tissue median
+CARRY_BREADTH = 0.2                   # share of markers >= 3x their study x tissue median
+AERIAL = {"Leaf", "Shoot"}
+SAME_PREP_STRANDED = True             # amendment A (approved, Rubén 24 Oct 2026)
+EXEMPT_LOW_GROUPS = True              # amendment B (approved, Rubén 24 Oct 2026)
+# replicates = samples sharing every design field (same key as build_contrasts.py)
+GROUP_KEY = ["study_id", "genotype", "tissue_group", "tissue_detail", "temp_label_paper", "temperature_C",
+             "temperature_night_C", "control_temperature_C", "phase", "time_h", "recovery_h", "light_condition",
+             "other_factor", "other_factor_level"]
 
 qc_rows = list(csv.DictReader(open(ROOT / "metadata" / "library_qc.tsv"), delimiter="\t"))
 smp = {s["sample_id"]: s for s in csv.DictReader(open(ROOT / "metadata" / "samples.tsv"), delimiter="\t")
@@ -53,8 +73,11 @@ for study, rs in by_study.items():
     major = collections.Counter(r["library_type"] for r in rs).most_common(1)[0][0]
     by_tissue = collections.defaultdict(list)
     tg = lambda sid: (smp[sid]["tissue_group"], smp[sid]["genotype"])
+    by_group = collections.defaultdict(list)
     for r in rs:
         by_tissue[tg(r["sample_id"])].append(float(r["percent_mapped"]))
+        by_group[group[r["sample_id"]]].append(float(r["percent_mapped"]))
+    prep = (lambda lt: (lt[0], lt.endswith("U"))) if SAME_PREP_STRANDED else (lambda lt: lt)
     for r in rs:
         sid, pct, mapped = r["sample_id"], float(r["percent_mapped"]), int(r["reads_mapped"])
         floor = MIN_MAPPED_STUDY.get(study, MIN_MAPPED_TAG if study in TAG_STUDIES else MIN_MAPPED)
@@ -63,9 +86,10 @@ for study, rs in by_study.items():
         med = statistics.median(by_tissue[tg(sid)])
         if pct < MIN_PCT:
             reasons[sid].append(f"{pct:.1f}% mapped (< {MIN_PCT:.0f}%)")
-        elif pct < med - MAX_BELOW_MEDIAN:
+        elif pct < med - MAX_BELOW_MEDIAN and not (
+                EXEMPT_LOW_GROUPS and statistics.median(by_group[group[sid]]) < med - MAX_BELOW_MEDIAN):
             reasons[sid].append(f"{pct:.1f}% mapped vs {med:.1f}% median for its study, tissue and genotype")
-        if r["library_type"] != major:
+        if prep(r["library_type"]) != prep(major):
             reasons[sid].append(f"library type {r['library_type']} vs study {major}")
 
 # rule 4
@@ -116,6 +140,49 @@ for path in sorted(glob.glob(str(ROOT / "results" / "*" / "salmon.merged.gene_co
                     reasons[names[i]].append(f"disagrees with its replicates: r = {r_i:.3f} with them vs "
                                              f"{r_oth:.3f} among them (study within-group median {wmed:.3f})")
 
+# rule 5 (libraries passing rules 1-4)
+mk_rows = list(csv.DictReader(open(ROOT / "metadata" / "build" / "tissue_markers.tsv"), delimiter="\t"))
+markers = {"root": [r["gene_id"] for r in mk_rows if r["marker_of"] == "leaf"],     # keyed by the library's tissue
+           "aerial": [r["gene_id"] for r in mk_rows if r["marker_of"] == "root"]}
+ref_sum = {"root": sum(float(r["ref_tpm"]) for r in mk_rows if r["marker_of"] == "leaf"),
+           "aerial": sum(float(r["ref_tpm"]) for r in mk_rows if r["marker_of"] == "root")}
+want = set(markers["root"]) | set(markers["aerial"])
+tpm = {}
+for path in sorted(glob.glob(str(ROOT / "results" / "*" / "salmon.merged.gene_tpm.tsv"))):
+    tab = list(csv.reader(open(path), delimiter="\t"))
+    head = tab[0]
+    rows = [r for r in tab[1:] if r[0] in want]
+    for j in range(2, len(head)):
+        if head[j] in smp and head[j] not in reasons:
+            tpm[head[j]] = {r[0]: float(r[j]) for r in rows}
+tissue = {s: "root" if smp[s]["tissue_group"] == "Root" else "aerial" if smp[s]["tissue_group"] in AERIAL else None
+          for s in tpm}
+libs = collections.defaultdict(list)                          # (study, tissue_group) -> libraries
+for s in tpm:
+    if tissue[s]:
+        libs[(smp[s]["study_id"], smp[s]["tissue_group"])].append(s)
+share = {s: sum(tpm[s].get(g, 0.0) for g in markers[tissue[s]]) / ref_sum[tissue[s]] for s in tpm if tissue[s]}
+gmed = lambda ids, g: statistics.median(tpm[s].get(g, 0.0) for s in ids)
+carry = []
+for (study, tg_), ids in libs.items():
+    mk = markers[tissue[ids[0]]]
+    med = statistics.median(share[s] for s in ids)
+    gm = {g: gmed(ids, g) for g in mk}
+    for s in ids:
+        fold = (share[s] + 1e-4) / (med + 1e-4)
+        reps = [k for k in ids if k != s and group[k] == group[s]]
+        fold_rep = (share[s] + 1e-4) / (statistics.median(share[k] for k in reps) + 1e-4) if reps else None
+        breadth = sum((tpm[s].get(g, 0.0) + 1) / (gm[g] + 1) >= 3 for g in mk) / len(mk)
+        if (fold >= CARRY_FOLD and 100 * (share[s] - med) >= CARRY_EXCESS and breadth >= CARRY_BREADTH
+                and (fold_rep is None or fold_rep >= CARRY_FOLD)):
+            kind = "leaf" if tissue[s] == "root" else "root"
+            rep_txt = f"{fold_rep:.1f}x its replicates" if reps else "no replicates"
+            reasons[s].append(f"{kind} carry-over: {kind} markers {100 * share[s]:.2f}% of mRNA vs {100 * med:.2f}% study and "
+                              f"tissue median ({fold:.1f}x; {rep_txt}; {100 * breadth:.0f}% of markers >= 3x)")
+            carry.append(s)
+print(f"rule 5: {len(markers['root'])} leaf and {len(markers['aerial'])} root markers (MaizExpressN); "
+      f"{len(carry)} libraries with tissue carry-over")
+
 out = sorted([study_of.get(s, smp[s]["study_id"]), s, "; ".join(v)] for s, v in reasons.items())
 with open(ROOT / "metadata" / "library_exclusions.tsv", "w", newline="") as f:
     w = csv.writer(f, delimiter="\t", lineterminator="\n")
@@ -128,7 +195,8 @@ n_lib = collections.Counter(r["study_id"] for r in qc_rows)
 n_out = collections.Counter(o[0] for o in out)
 print(f"{len(out)} of {len(qc_rows)} libraries excluded -> metadata/library_exclusions.tsv")
 lost = []
-for c in csv.DictReader(open(ROOT / "metadata" / "contrasts.tsv"), delimiter="\t"):
+cpath = ROOT / "metadata" / "contrasts.tsv"
+for c in (csv.DictReader(open(cpath), delimiter="\t") if cpath.exists() else []):
     num = [s for s in c["numerator_samples"].split(";") if s and s not in excluded]
     den = [s for s in c["denominator_samples"].split(";") if s and s not in excluded]
     if not num or not den:

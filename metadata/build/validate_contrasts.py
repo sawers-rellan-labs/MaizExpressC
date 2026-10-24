@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
-# TEMPLATE from MaizExpressN (nitrogen): adapt the N-specific parts (vocabularies, classes, labels, per-study rules) to cold at M4.
-"""Check metadata/contrasts.tsv against metadata/samples.tsv.
+"""Check metadata/contrasts.tsv against metadata/samples.tsv (cold).
 
-Checks: columns; class vocabulary; sample ids exist, are included and belong
-to the contrast's study; numerator and denominator are disjoint and n counts
-match; sign convention (lower N in the numerator; nitrate in the denominator
-for form contrasts); held-constant factors really are equal on both sides;
-no two pooled contrasts of a study use the same samples. Also lists included
-samples that no contrast uses, for review. Usage:
-python3 metadata/build/validate_contrasts.py
+Checks: columns; class vocabulary; sample ids exist, are included and belong to the contrast's
+study; numerator and denominator are disjoint and n counts match; each side is one condition group
+(a panel side: one group per inbred); sign convention (treatment in the numerator, a control at
+the control temperature in the denominator, the numerator colder unless it is a recovery group);
+held-constant factors really are equal on both sides; times match unless tagged not_time_matched;
+no two pooled contrasts of a study use the same samples. Also lists included samples that no
+contrast uses, for review. Usage: python3 metadata/build/validate_contrasts.py
 """
 import csv
 import sys
@@ -16,16 +15,9 @@ from collections import defaultdict
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_contrasts import COLS, ROOT  # noqa: E402
+from build_contrasts import COLS, GROUP_KEY, ROOT, is_control, num  # noqa: E402
 
-CLASSES = {"deficiency", "starvation", "resupply", "excess", "field_rate", "local", "form"}
-
-
-def num(x):
-    try:
-        return float(x)
-    except ValueError:
-        return None
+CLASSES = {"chilling", "freezing", "recovery", "germination", "chronic", "field_cold"}
 
 
 def main():
@@ -49,6 +41,8 @@ def main():
             problems.append(f"{cid}: numerator and denominator overlap")
         if len(ns) != int(c["n_numerator"]) or len(ds) != int(c["n_denominator"]):
             problems.append(f"{cid}: n counts do not match sample lists")
+        if (c["replicated"] == "TRUE") != (len(ns) >= 2 and len(ds) >= 2):
+            problems.append(f"{cid}: replicated flag does not match n")
         side = {}
         for name, ids in (("num", ns), ("den", ds)):
             for i in ids:
@@ -64,33 +58,32 @@ def main():
             side[name] = [samples[i] for i in ids if i in samples]
         if not side.get("num") or not side.get("den"):
             continue
-        a, b = side["num"][0], side["den"][0]
-        # every sample of one side shares the design fields
+        # each side is one condition group (a panel side: one group per inbred, same design otherwise)
         for name in ("num", "den"):
-            fields = ("genotype", "tissue_detail", "N_label_paper", "N_amount", "phase",
-                      "time_h", "other_factor_level")
-            if len({tuple(s[f] for f in fields) for s in side[name]}) > 1:
+            keys = [k for k in GROUP_KEY if not ("panel" in tags and k == "genotype")]
+            if len({tuple(s[k] for k in keys) for s in side[name]}) > 1:
                 problems.append(f"{cid}: {name} samples are not one condition group")
+        a, b = side["num"][0], side["den"][0]
         # held constant
-        relaxed = "split_vs_homogeneous" in tags  # split-root half vs homogeneous roots
-        for f in ("genotype",) if relaxed else ("genotype", "tissue_detail", "other_factor_level"):
+        held = ["tissue_detail"] if "tissue_mismatch" not in tags else []
+        if "panel" not in tags:
+            held.append("genotype")
+        if not tags & {"chilling_site", "combined_treatment"}:
+            held.append("other_factor_level")
+        for f in held:
             if a[f] != b[f]:
                 problems.append(f"{cid}: {f} differs ({a[f]!r} vs {b[f]!r})")
-        if "not_time_matched" not in tags and a["time_h"] != b["time_h"]:
+        if "panel" in tags and sorted(s["genotype"] for s in side["num"]) != sorted(s["genotype"] for s in side["den"]):
+            problems.append(f"{cid}: panel sides do not hold the same inbreds")
+        if a["time_h"] != b["time_h"] and b["time_h"] != "" and "not_time_matched" not in tags:
             problems.append(f"{cid}: time differs ({a['time_h']} vs {b['time_h']}) without tag")
-        # sign convention
-        if c["contrast_class"] == "form":
-            if b["N_form"] != "nitrate" or a["N_form"] == "nitrate":
-                problems.append(f"{cid}: form contrast must be alternative / nitrate")
-            if a["N_amount"] != b["N_amount"]:
-                problems.append(f"{cid}: form contrast with different total N")
-        elif "systemic_signal" not in tags:
-            if int(a["N_rank_in_study"]) >= int(b["N_rank_in_study"]):
-                problems.append(f"{cid}: numerator rank {a['N_rank_in_study']} not below "
-                                f"denominator {b['N_rank_in_study']}")
-            x, y = num(a["N_amount"]), num(b["N_amount"])
-            if x is not None and y is not None and a["N_unit"] == b["N_unit"] and x >= y:
-                problems.append(f"{cid}: numerator N {x} not below denominator N {y}")
+        # sign convention: treatment / control
+        if is_control(a) or not is_control(b):
+            problems.append(f"{cid}: numerator must be a treatment group and denominator a control")
+        if a["phase"] != "recovery" and not num(a["temperature_C"]) < num(b["temperature_C"]):
+            problems.append(f"{cid}: numerator {a['temperature_C']} °C not colder than denominator {b['temperature_C']} °C")
+        if (c["contrast_class"] == "recovery") != (a["phase"] == "recovery"):
+            problems.append(f"{cid}: class {c['contrast_class']} vs numerator phase {a['phase']}")
         if c["pool"] == "TRUE":
             key = (frozenset(ns), frozenset(ds))
             if key in seen_sets[c["study_id"]]:

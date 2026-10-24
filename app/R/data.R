@@ -1,12 +1,11 @@
-# TEMPLATE from MaizExpressN (nitrogen): adapt the N-specific parts (vocabularies, classes, labels, per-study rules) to cold at M7.
 # Data access for the MaizeExpressC app. Shiny sources app/R/*.R before app.R (alphabetically),
 # so the packages these helpers need are loaded here.
 suppressPackageStartupMessages({ library(data.table); library(arrow); library(plotly) })
 
 # Data access for the MaizeExpressC app. The data folder is app/data by default; set
-# MAIZEXPRESSN_DATA to point elsewhere (built by app/prepare_data.R).
+# MAIZEEXPRESSC_DATA to point elsewhere (built by app/prepare_data.R).
 
-DATA_DIR <- Sys.getenv("MAIZEXPRESSN_DATA", "data")
+DATA_DIR <- Sys.getenv("MAIZEEXPRESSC_DATA", "data")
 rp <- function(f) as.data.table(arrow::read_parquet(file.path(DATA_DIR, f)))
 
 GENES     <- rp("genes.parquet")
@@ -16,23 +15,38 @@ CONTRASTS <- rp("contrasts.parquet")
 SAMPLES   <- rp("samples.parquet")
 STUDIES   <- rp("studies.parquet")
 META_TC   <- rp("meta_tissue_class.parquet")
-META_TL   <- rp("meta_tissue_level.parquet")
+META_TK   <- rp("meta_tissue_cold.parquet")
+CONTROLS  <- rp("cold_controls.parquet")                      # cold positive controls (M5)
 BUILT     <- tryCatch(readLines(file.path(DATA_DIR, "BUILT"))[1], error = function(e) "")
+# MaizeMine extras for the gene card (annotation/fetch_maizemine.py); empty tables in older data builds
+rp_opt <- function(f) if (file.exists(file.path(DATA_DIR, f))) rp(f) else data.table(gene_id = character())
+PATHWAYS  <- rp_opt("pathways.parquet")
+GWAS_HITS <- rp_opt("gwas_hits.parquet")
+VARIANTS  <- rp_opt("variants.parquet")
+PANGENES  <- rp_opt("pangenes.parquet")
+LITERATURE <- rp_opt("literature.parquet")                    # gene-specific papers (NCBI gene2pubmed)
+ATLAS_SAMPLES <- if (file.exists(file.path(DATA_DIR, "atlas_samples.parquet"))) rp("atlas_samples.parquet") else data.table()
+MAIZEMINE <- tryCatch(jsonlite::fromJSON(file.path(DATA_DIR, "maizemine_release.json")), error = function(e) list())
 setkey(GENES, gene_id)
 setkey(ALIASES, alias_lower)
+for (x in list(PATHWAYS, GWAS_HITS, VARIANTS, PANGENES, LITERATURE, CONTROLS)) setkey(x, gene_id)
 go_name <- setNames(GO_TERMS$go_name, GO_TERMS$go_id)
 
-CLASSES <- c("deficiency", "starvation", "resupply", "excess", "field_rate", "local", "form")
-CLASS_LABEL <- c(deficiency = "Deficiency", starvation = "Starvation", resupply = "Resupply",
-                 excess = "Excess", field_rate = "Field rate", local = "Local (split-root)", form = "N form",
-                 all_levels = "All N levels")
-# Okabe-Ito based, colour-blind safe
-CLASS_COL <- c(deficiency = "#0072B2", starvation = "#56B4E9", resupply = "#009E73", excess = "#E69F00",
-               field_rate = "#CC79A7", local = "#D55E00", form = "#7A5C3A", all_levels = "#3C4650")
-TISSUES <- c("Root", "Leaf", "Shoot", "Ear/kernel", "Whole seedling")
-SYSTEMS <- c("Hydroponic", "Solid substrate", "Soil/pots", "Field", "Not reported")
-STAGES  <- c("seedling", "vegetative", "reproductive", "Not reported")
-LEVEL_CLASSES <- c("deficiency", "starvation", "resupply", "excess", "field_rate", "local")
+CLASSES <- c("chilling", "freezing", "recovery", "germination", "chronic")
+CLASS_LABEL <- c(chilling = "Chilling", freezing = "Freezing", recovery = "Recovery", germination = "Germination",
+                 chronic = "Chronic (grown cool)", acute_cold = "Acute cold")
+# Okabe-Ito based, colour-blind safe: the two acute cold classes in blues, recovery warm
+CLASS_COL <- c(chilling = "#0072B2", freezing = "#56B4E9", recovery = "#D55E00", germination = "#009E73",
+               chronic = "#CC79A7", acute_cold = "#3C4650")
+TISSUES <- c("Leaf", "Shoot", "Whole seedling", "Root", "Seed/germination")
+SYSTEMS <- c("Growth chamber", "Greenhouse", "Field", "Not reported")
+STAGES  <- c("seedling", "seed/germination")
+TOLERANCE <- c("tolerant", "sensitive", "mixed", "Not reported")
+COLD_CLASSES <- c("chilling", "freezing")                     # pooled together as "Acute cold"
+# time in the cold, in bins (contrasts without a time: chronic growth, or a single untimed sampling)
+DURATIONS <- c(short = "up to 3 h", day = "3 h to 1 d", days = "1 to 3 d", long = "over 3 d", none = "not timed")
+duration_bin <- function(t) fifelse(is.na(t), "none", fifelse(t <= 3, "short", fifelse(t <= 24, "day", fifelse(t <= 72, "days", "long"))))
+CONTRASTS[, duration := duration_bin(time_h)]
 
 bucket <- function(g) substr(g, 10, 12)
 
@@ -52,6 +66,23 @@ get_tpm <- function(gid) {
   f <- file.path(DATA_DIR, "tpm", paste0(bucket(gid), ".parquet"))
   if (!file.exists(f)) return(data.table())
   as.data.table(arrow::read_parquet(f))[gene_id == gid]
+}
+
+# B73 expression atlas (MaizeMine; mean FPKM per sample), split by gene bucket like the DE tables
+get_atlas <- function(gid) {
+  f <- file.path(DATA_DIR, "atlas", paste0(bucket(gid), ".parquet"))
+  if (!file.exists(f)) return(data.table())
+  as.data.table(arrow::read_parquet(f))[gene_id == gid]
+}
+MAIZEMINE_URL <- "https://maizemine.rnet.missouri.edu/maizemine/portal.do"
+maizemine_link <- function(id, class) paste0(MAIZEMINE_URL, "?externalids=", utils::URLencode(id, reserved = TRUE), "&class=", class)
+
+# strongest co-expression partners (app/prepare_partners.R); partner IDs are stored as their number
+get_partners <- function(gid) {
+  f <- file.path(DATA_DIR, "partners", paste0(bucket(gid), ".parquet"))
+  if (!file.exists(f)) return(data.table())
+  x <- as.data.table(arrow::read_parquet(f))[gene_id == gid]
+  x[, partner_id := sprintf("Zm00001eb%06d", partner)][, partner := NULL][]
 }
 
 # gene search: exact alias match first, then prefix and description matches

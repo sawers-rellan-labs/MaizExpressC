@@ -1,0 +1,23 @@
+filter_set	tissue_group	contrast_class	genes	max_k_studies	genes_k2plus	sig_k2plus
+B73	Leaf	chilling	30952	7	27360	2670
+B73	Root	chilling	26225	2	19156	1348
+B73	Shoot	chilling	29359	3	25334	1404
+all	Leaf	chilling	32148	16	29350	3236
+all	Leaf	chronic	25639	1	0	0
+all	Leaf	freezing	20063	1	0	0
+all	Leaf	recovery	23255	1	0	0
+all	Root	chilling	31592	6	28828	196
+all	Root	chronic	25631	1	0	0
+all	Seed/germination	germination	29387	3	25825	679
+all	Seed/germination	recovery	26858	1	0	0
+all	Shoot	chilling	29609	3	25410	1561
+all	Shoot	chronic	25574	1	0	0
+all	Whole seedling	chilling	26430	1	0	0
+all	Whole seedling	germination	27296	1	0	0
+B73	Leaf	acute_cold	30952	7	27360	2670
+B73	Root	acute_cold	26225	2	19156	1348
+B73	Shoot	acute_cold	29359	3	25334	1404
+all	Leaf	acute_cold	32173	17	29422	3187
+all	Root	acute_cold	31592	6	28828	196
+all	Shoot	acute_cold	29609	3	25410	1561
+all	Whole seedling	acute_cold	26430	1	0	0

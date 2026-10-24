@@ -1,0 +1,73 @@
+using 'avgTxLength' from assays(dds), correcting for library size
+Avila2018              4 contrasts     9.8 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Crow2020              18 contrasts   532.1 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Frey2020              22 contrasts   850.8 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Friero2023             2 contrasts     5.7 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Gao2024                2 contrasts     4.8 s
+using 'avgTxLength' from assays(dds), correcting for library size
+He2016                 2 contrasts     0.2 s
+using 'avgTxLength' from assays(dds), correcting for library size
+He2023a                6 contrasts    17.0 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Jia2020                4 contrasts     6.4 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Jiang2022              2 contrasts     6.4 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Jiang2023              2 contrasts     7.1 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Li2016                 2 contrasts     3.7 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Li2017                 1 contrasts     3.6 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Li2020a                3 contrasts     6.1 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Li2022c                3 contrasts     6.8 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Li2022d                4 contrasts     8.7 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Li2025                 4 contrasts     7.7 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Liao2026               2 contrasts     4.6 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Lu2017                 1 contrasts     3.6 s
+using 'avgTxLength' from assays(dds), correcting for library size
+using 'avgTxLength' from assays(dds), correcting for library size
+Makarevitch2015        3 contrasts    12.6 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Meng2022a              2 contrasts     5.2 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Meng2025               8 contrasts    30.5 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Sommer2025             2 contrasts     6.1 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Wang2023               3 contrasts     6.1 s
+converting counts to integer mode
+converting counts to integer mode
+Xue2021               12 contrasts    50.3 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Yang2025               1 contrasts     4.6 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Yu2021                 4 contrasts     8.9 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Zeng2021               2 contrasts     4.6 s
+Zeng2024             skipped: error: contrasts can be applied only to factors with 2 or more levels
+using 'avgTxLength' from assays(dds), correcting for library size
+using 'avgTxLength' from assays(dds), correcting for library size
+Zhang2017              7 contrasts    42.0 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Zhang2020              2 contrasts     4.5 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Zhang2024              2 contrasts     5.3 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Zhao2021               1 contrasts     3.6 s
+using 'avgTxLength' from assays(dds), correcting for library size
+using 'avgTxLength' from assays(dds), correcting for library size
+using 'avgTxLength' from assays(dds), correcting for library size
+Zhou2022              96 contrasts   298.1 s
+using 'avgTxLength' from assays(dds), correcting for library size
+Zhou2024              10 contrasts    60.8 s
+6333268 gene x contrast rows from 33 studies

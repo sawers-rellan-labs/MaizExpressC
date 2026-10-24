@@ -30,3 +30,9 @@ test_that("every quantified gene is in the annotation", {
   counts <- fread(tables[1], select = "gene_id")
   expect_true(all(counts$gene_id %in% g$gene_id))
 })
+
+test_that("cold genes are found by symbol, old IDs and Arabidopsis name", {
+  for (q in c("dbp4", "Zm00001d036003", "GRMZM2G380377")) expect_true(COLD[["dbp4"]] %in% hits(q), info = q)
+  expect_true(COLD[["ereb65"]] %in% hits("DDF2"))              # DREB1/CBF genes via their Arabidopsis best hit
+  expect_gte(length(hits("ddf2")), 5)
+})

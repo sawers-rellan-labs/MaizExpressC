@@ -46,9 +46,20 @@ def main(write=False):
         if r["include"] == "TRUE":
             want[r["study_id"]].add(r["run_accession"])
 
+    # studies not used in the analysis (every accession has role not_used): their runs are not in
+    # runs.tsv, so their sheets are kept for the record but left out of the merged tables
+    roles = defaultdict(set)
+    for a in csv.DictReader(open(ROOT / "metadata" / "accessions_resolved.tsv"), delimiter="\t"):
+        roles[a["study_id"]].add(a["role"])
+    not_used = {s for s, r in roles.items() if r == {"not_used"}}
+
     problems, merged, reviews = [], [], []
     seen_ids = Counter()
     files = sorted(p for p in SAMPLES.glob("*.tsv") if not p.name.endswith(".review.tsv"))
+    skipped = [p.stem for p in files if p.stem in not_used]
+    files = [p for p in files if p.stem not in not_used]
+    if skipped:
+        print("not used in this analysis, sheets skipped:", ", ".join(skipped))
     for p in files:
         study = p.stem
         rows = list(csv.reader(open(p), delimiter="\t"))

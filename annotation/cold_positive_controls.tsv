@@ -1,0 +1,16 @@
+gene_id	symbol	group	role	v4_ids	description	ath_best_hit	ath_symbol	tested_aerial_acute	up_aerial_acute	down_aerial_acute	median_log2fc_aerial_acute	tested_root	up_root	down_root	median_log2fc_root	tested_chronic	up_chronic	down_chronic	median_log2fc_chronic
+Zm00001eb103110	ereb65	DREB1/CBF	positive_control	Zm00001d006170	AP2 domain	AT1G63030	ddf2	62	53	1	5.48	38	0	1	-0.85				
+Zm00001eb318890	ereb36	DREB1/CBF	positive_control	Zm00001d021205	DNA-binding domain in plant proteins such as APETALA2 and EREBPs	AT1G63030	ddf2	61	51	1	7.56	15	2	0	0.21	18	0	0	0
+Zm00001eb269420	dbp4	DREB1/CBF	positive_control	Zm00001d036003	DRE-binding protein	AT1G63030	ddf2	58	49	2	6.43	36	5	2	-0.13	18	0	0	-0.66
+Zm00001eb318900	ereb23	DREB1/CBF	positive_control	Zm00001d021207	AP2 domain	""	""	58	47	1	4.88	11	0	0	-0.19				
+Zm00001eb250560	ereb16	DREB1/CBF	positive_control	Zm00001d017592	DNA-binding domain in plant proteins such as APETALA2 and EREBPs	AT1G63030	ddf2	58	46	2	4.72	12	1	1	0.99	18	0	0	-0.05
+Zm00001eb073550	ereb105	DREB1/CBF	positive_control	Zm00001d002618	AP2 domain	AT1G63030	ddf2	58	42	2	4.56	11	1	0	1.05	18	0	0	-1.38
+Zm00001eb037530	ereb79	DREB1/CBF	positive_control	Zm00001d031728	DNA-binding domain in plant proteins such as APETALA2 and EREBPs	AT1G63030	ddf2	54	33	3	4.29	38	0	2	-0.21				
+Zm00001eb103100	dbf3	DREB1/CBF	positive_control	Zm00001d006169	DRE-binding protein	AT1G63030	ddf2	53	33	1	4.32	11	1	0	0.68				
+Zm00001eb187010	dhn3	dehydrin (COR/LEA)	weak_control	Zm00001d051420	dehydrin	""	""	62	37	1	1.59	38	8	2	-0.16	18	0	3	-0.38
+Zm00001eb376710	dhn2	dehydrin (COR/LEA)	weak_control	Zm00001d045321	dehydrin, 40kD	""	""	41	16	0	3.56	14	3	1	0.72				
+Zm00001eb052790	dhn13	dehydrin (COR/LEA)	weak_control	Zm00001d033483	dehydrin	""	""	62	32	5	0.77	38	6	2	0.1	18	1	0	-0.04
+Zm00001eb250120	dhn15	dehydrin (COR/LEA)	weak_control	Zm00001d017547	dehydrin	""	""	62	26	3	0.84	38	12	2	0.4	18	0	4	-0.63
+Zm00001eb113220	bhlh96	ICE1 homologue (SCREAM-like bHLH)	reference	Zm00001d007382	bHLH transcription factor, scream-like bHLH transcription factor	""	""	45	3	4	-0.27	38	0	2	-0.53	18	0	0	0
+Zm00001eb142500	bhlh175	ICE1 homologue (SCREAM-like bHLH)	reference	Zm00001d042263	bHLH transcription factor, scream-like bHLH transcription factor	""	""	62	33	4	0.7	38	8	1	0.49	18	2	0	-0.17
+Zm00001eb170530	bhlh130	ICE1 homologue (SCREAM-like bHLH)	reference	Zm00001d049294	bHLH transcription factor, scream-like bHLH transcription factor	""	""	62	5	5	-0.19	38	2	2	0.09	18	0	1	-0.13

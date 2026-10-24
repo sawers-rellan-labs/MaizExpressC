@@ -310,7 +310,7 @@ MATES = {}       # study -> function pairing R1/R2 uploaded as separate runs (se
 
 # Whole studies not used in the analysis: {study_id: "not used in this analysis"}.
 # Reasons live in private/ (gitignored), never in committed files.
-NOT_USED = {s: "not used in this analysis" for s in ("Li2022b", "Gu2017")}
+NOT_USED = {s: "not used in this analysis" for s in ("Li2022b", "Gu2017", "Liu2026", "Bozic2025")}
 
 # Datasets claimed by two studies: who owns the runs.
 OWNER = {"PRJNA1050059": "Zhang2024",     # Dou2025 reuses Zhang2024's libraries
