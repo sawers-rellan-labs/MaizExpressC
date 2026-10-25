@@ -28,13 +28,16 @@ Rscript -e 'shiny::runApp("app", launch.browser = TRUE)'
 Run from the project root (the renv library activates there). The app reads `app/data/`, built by
 `app/prepare_data.R` and `app/prepare_partners.R`; set `MAIZEXPRESSC_DATA` to use a data folder elsewhere.
 
-## Deploy to Posit Connect Cloud (not deployed yet)
+## Deploy to Posit Connect Cloud
 
-Same route as MaizExpressN (account `gemmalab`). From an R session started in the project root:
+Live app: <https://01a1701f-0a1c-6672-b1c8-1bd80cc5548b.share.connect.posit.cloud/> (public link; managed at
+<https://connect.posit.cloud/gemmalab/content/01a1701f-0a1c-6672-b1c8-1bd80cc5548b>, account `gemmalab`).
+
+Same route as MaizExpressN. From an R session started in the project root:
 
 ```r
 rsconnect::connectCloudUser()                                   # once per computer: authorise in the browser
-rsconnect::deployApp(appDir = "app", appName = "maizexpressc")  # upload app/ (about 720 MB) and publish
+rsconnect::deployApp(appDir = "app", appName = "maizexpressc")   # upload app/ (about 700 MB) and publish
 ```
 
 The upload is about 716 MB (`app/data` 721 MB: DE 383, TPM 206, partner lists 66, atlas 16), under the
